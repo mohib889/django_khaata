@@ -1,0 +1,28 @@
+{% extends "home/layout.html" %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Home</li>
+{% endblock %}
+
+{% block content %}
+{% include 'partials/messages.html' %}
+  <p>Welcome to Hisaab Web App, a website developed by <em>Mohib Khan</em>!</p>
+
+
+  <h2>Dynamic content</h2>
+  <p>The App has the following record counts:</p>
+  <ul>
+    <li><strong>Books:</strong> {{ num_books }}</li>
+    <li><strong>Accounts:</strong> {{ num_accounts }}</li>
+    <li><strong>Bank Accounts:</strong> {{ num_bank_accounts }}</li>
+    <li><strong>Simple Accounts:</strong> {{ num_simple_accounts }}</li>
+    <li><strong>Clearing Accounts:</strong> {{ num_clearing_accounts }}</li>
+    <li><strong>Hawala Accounts:</strong> {{ num_hawala_accounts }}</li>
+    <li><strong>Lahore Accounts:</strong> {{ num_lahore_accounts }}</li>
+    <li><strong>Transactions:</strong> {{ num_transactions }}</li>
+    <li><strong>Credits:</strong> {{ credit }}</li>
+    <li><strong>Debits:</strong> {{ debit }}</li>
+
+  </ul>
+
+  <!-- <a href="{% url 'logout'%}">Click here to logout.</a> -->
+{% endblock %}

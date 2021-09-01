@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Export</title>
+   
+    <style>
+        
+
+        table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-size:11px
+}
+
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+th, td {
+  padding: 1px  ;
+}
+
+
+        @page{
+            size: 'A4';
+            margin: 2.5cm, 1.5cm, 3.5cm, 1.5cm;
+        
+        
+
+            @bottom-right{
+                content: "Page " counter(page)  " of " counter(pages); 
+            }
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+    <div style="line-height: 0.1;">
+        <h4>Campany Name</h4>
+        <caption style="font-size: 9px;">Tag line</caption>
+    </div>
+    <br>
+    <div style="border: 1px black solid; width: 300px; line-height: 0.3; height: 100px; font-size: 11px;">
+        <p style="margin-left: 5px;">Title: Mohib</p>
+        <p style="margin-left: 5px;">Accoun No: 124345</p>
+        <p style="margin-left: 5px;">Address: xyz</p>
+        <p style="margin-left: 5px;">Phone: 124345</p>
+        <p style="margin-left: 5px;">Date: 12/43/45</p>
+        <p style="margin-left: 5px;">From Date: {{start}}  To Date{{end}}</p>
+
+        
+    </div>
+<br>
+    {% if transaction_list %}
+
+  
+  <table class="table" style="width:700px">
+    
+    <thead class="thead">
+
+      <tr>
+        <th>Date</th>
+        <th>Reference Number</th>
+        <th colspan="2">Details</th>
+        <th>Credit Account</th>
+        <th>Debit Account</th>
+        <th>Credit</th>
+        <th>Debit</th>
+        <th>Balance</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      {% for trans in transaction_list %}
+      <tr>
+        <th >{{ trans.transaction_date| date:"F d Y"  }}</th>
+        <td>{{ trans.refernce_number }}</td>
+        <td colspan="2">{{ trans.transaction_detail }}</td>
+        <td>{{ trans.account }}</td>
+        <td>{{ trans.bank }}</td>
+        <td>
+          {% if trans.transaction_type == credit  %}
+          {{ trans.amount }}
+          {% endif %}
+        </td>
+        <td class="text-danger" style="color: red;">
+          {% if trans.transaction_type == debit  %}
+          {{ trans.amount }}
+          {% endif %}
+        </td>
+
+        <td >
+          {{ trans.balance_after_transaction }}
+        </td>
+        
+      </tr>
+
+      {% endfor %}
+    </tbody>
+
+  
+  
+  </table>
+
+    {% else %}
+
+  <p>There are no transactions in the app.</p>
+
+
+
+
+{% endif %} 
+</body>
+</html>

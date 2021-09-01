@@ -1,0 +1,31 @@
+{% extends "home/layout.html" %}
+
+{% block brand %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<div class="container">
+	  <a class="navbar-brand" href="{% url 'login' %}">Khaatabook</a>
+	</div>
+  </nav>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block content %} 
+
+{% load crispy_forms_tags %}         
+
+<!--Register--> 
+<div class="container py-5">
+	<h1>Register</h1>
+    {% include 'partials/messages.html' %}
+	<form method="POST">
+		{% csrf_token %}
+		{{ register_form|crispy }}                    
+		<button class="btn btn-primary" type="submit">Register</button>
+	</form>
+	<p class="text-center">If you already have an account, <a href="{% url 'login' %}">login</a> instead.</p>
+</div>
+
+{% endblock %}

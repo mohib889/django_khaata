@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Khaata Book</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <div class="container-fluid">
+    {% block brand %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'index' %}">Khaatabook</a>
+        </div>
+      </nav>
+    {% endblock %}
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          
+          <div class="breadcrumb container mt-3 p-2" style="background-color:wheat;">
+            {% block breadcrumb %}
+
+            {% endblock %}
+          </div>  
+       
+        </ol>
+      </nav>
+    
+    <div class="row">
+      <div class="col-sm-2">
+      {% block sidebar %}
+        <ul class="sidebar-nav">
+          <li>
+            <a style="text-decoration: none;" class="link-light" href="{% url 'index' %}">
+            <div class="p-3 mb-2 bg-dark bg-gradient ">
+Home            </div>
+           </a> 
+        </li>
+        <li>
+          <a style="text-decoration: none;" class="link-light" href="{% url 'book' %}">
+          <div class="p-3 mb-2 bg-dark bg-gradient ">
+           All Books
+          </div>
+         </a> 
+      </li>
+      <li>
+        <a style="text-decoration: none;" class="link-light" href="{% url 'account' %}">
+        <div class="p-3 mb-2 bg-dark bg-gradient ">
+         All Accounts
+        </div>
+       </a> 
+    </li>
+    <li>
+      <a style="text-decoration: none;" class="link-light" href="{% url 'transaction' %}">
+      <div class="p-3 mb-2 bg-dark bg-gradient ">
+      Transactions
+      </div>
+     </a> 
+  </li>
+
+
+        </ul>
+
+
+        <ul class="sidebar-nav">
+      
+         {% if user.is_authenticated %}
+           <li>User: {{ user.get_username }}</li>
+           <li><a href="{% url 'logout' %}?next={{request.path}}">Logout</a></li>
+         {% else %}
+           <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>
+         {% endif %} 
+        </ul> 
+     {% endblock %}
+
+      </div>
+      <div class="col-sm-10 ">{% block content %}{% endblock %}</div>
+    </div>
+  </div>
+</body>
+</html>

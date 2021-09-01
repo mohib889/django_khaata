@@ -1,0 +1,32 @@
+{% extends "home/layout.html" %}
+{% block breadcrumb %}
+
+  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+  <li class="breadcrumb-item " aria-current="page"><a href="{% url 'transaction' %}">All Transaction</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{transaction.transaction_type}}</li>
+  {% endblock %}
+
+{% block content %}
+
+
+  <h1>Transaction type: {{ transaction.transaction_type }}</h1>
+
+  <p><strong>ID:</strong> <a href="">{{ transaction.id }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Detail:</strong> {{ transaction.transaction_detail }}</p>
+  <p><strong>Date Created:</strong> {{ transaction.transaction_date }}</p>
+  <p><strong>Account:</strong> {{ transaction.account }}</p>
+  <p><strong>Bank:</strong> {{ transaction.bank }}</p>
+  <p><strong>Amount:</strong> {{ transaction.amount }}</p>
+  <p><strong>Balance:</strong> {{ transaction.balance_after_transaction }}</p>
+  <a href="{% url 'edit-transaction' transaction.id %}" class="btn btn-secondary">Edit</a>
+<br>
+<hr>
+  <img src="{{ transaction.slip }}" alt="Smiley face" width="600" height="400">
+<hr>
+
+
+
+ <!--
+  <a href="{% url 'delete-transaction' transaction.id %}" class="btn btn-danger">Delete</a>
+-->
+{% endblock %}

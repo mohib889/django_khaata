@@ -1,0 +1,84 @@
+{% extends "home/layout.html" %}
+
+{% block breadcrumb %}
+ 
+  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Search</li>
+
+  {% endblock %}
+
+{% block content %}
+  <h1>Result</h1>
+
+  {% include 'partials/messages.html' %}
+
+  {% if date_range_result %}
+
+  <p>Date: {{start}}  to {{end}}</p>
+  <table class="table table-dark table-striped table-hover">
+    <thead>
+
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Reference Number</th>
+        <th scope="col">Details</th>
+        <th scope="col">Credit Account</th>
+        <th scope="col">Debit Account</th>
+        <th scope="col">Credit</th>
+        <th scope="col">Debit</th>
+        <th scope="col">Balance</th>
+        <th scope="col">Slip</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for trans in date_range_result %}
+      <tr>
+        <th scope="row">{{ trans.transaction_date  | date:"F d Y"}}</th>
+        <td>{{ trans.refernce_number }}</td>
+        <td>{{ trans.transaction_detail }}</td>
+        <td>{{ trans.account }}</td>
+        <td>{{ trans.bank }}</td>
+        <td>
+          {% if trans.transaction_type == credit  %}
+          {{ trans.amount }}
+          {% endif %}
+        </td>
+        <td class="text-danger ">
+          {% if trans.transaction_type == debit  %}
+          {{ trans.amount }}
+          {% endif %}
+        </td>
+
+        <td >
+          {{ trans.balance_after_transaction }}
+        </td>
+        <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
+          <div class="p-0 mb-2 bg-dark bg-gradient ">
+          Slip {{trans.id}}
+        </div> </a></td>
+
+        
+      </tr>
+
+      {% endfor %}
+    </tbody>
+
+  
+  
+  </table>
+
+  <a href="{% url 'export-pdf' start end %}" class="btn btn-info">
+      Print
+  </a>
+    {% else %}
+
+  <p>There are no transactions in the app.</p>
+
+
+
+
+{% endif %} 
+
+
+
+{% endblock %}
