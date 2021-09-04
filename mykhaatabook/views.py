@@ -490,9 +490,8 @@ def edit_book(request, id):
         
         if not date:
             date = book.book_created_date
-
-        book.book_title = title,  
-        book.book_type = type,
+        book.book_title = title
+        book.book_type = type
         book.book_created_date = date
 
         book.save(force_update=True)
@@ -662,7 +661,7 @@ def add_transaction(request):
                     transaction_date = datetime.today()
                     transaction_date = transaction_date.date()
                     transaction_date = str(transaction_date)
-                    
+                 #changes needed to be done in production   
                 last_transaction_date = last_transaction_date.strftime('%Y-%m-%d')
                 last_transaction_date = datetime.strptime(last_transaction_date, '%Y-%m-%d')                
                 current_date = datetime.strptime(transaction_date, '%Y-%m-%d')
@@ -672,7 +671,7 @@ def add_transaction(request):
                 print('curent date: ', current_date, type(current_date))
                 current_date = pytz.utc.localize(current_date)
                 last_transaction_date = pytz.utc.localize(last_transaction_date)
-
+                #changes needed to be done in production  
                 if current_date < last_transaction_date:
                     messages.success(request, 'Date must be greater than last transaction date')
                     return redirect('add-transaction')
@@ -714,8 +713,8 @@ def add_transaction(request):
             print('Account Balance: ',account_object.balance)
             print('Bank Balance: ',bank_object.balance)
 
-            account_object.save()
-            bank_object.save()
+            account_object.save(force_update=True)
+            bank_object.save(force_update=True)
             
             Transaction.objects.create(operator = request.user , transaction_date = transaction_date, refernce_number = refernce_number ,transaction_detail =transaction_detail,account= account_object, bank =bank_object, transaction_type =transaction_type, amount = amount, slip = uploaded_file_url , balance_after_transaction = last_transaction_total)
             messages.success(request, 'Transaction saved succesfully')
@@ -742,7 +741,8 @@ def edit_transaction(request, id):
     last_transaction_total= 0
     last_total = 0
     flag = 0
-    account_trans_count =0
+    account_trans_count=0
+
 
     context = {
         'all_accounts':accounts,
@@ -755,19 +755,30 @@ def edit_transaction(request, id):
     }
 
     if request.method == 'POST':
+
+        if transaction.account:
+            transaction.account.balance = transaction.account.balance + transaction.amount
+            transaction.account.save()
+        if transaction.bank:
+            transaction.bank.balance = transaction.bank.balance - transaction.amount
+            transaction.bank.save()
+        if transaction.transaction_type == CREDIT:
+            transaction.balance_after_transaction = transaction.balance_after_transaction + transaction.amount
+            transaction.save()
+        if transaction.transaction_type == DEBIT:
+            transaction.balance_after_transaction = transaction.balance_after_transaction - transaction.amount
+            transaction.save()
+        if transaction.transaction_type == NONE:
+            transaction.balance_after_transaction = transaction.balance_after_transaction
+            transaction.save()
         transaction_date = request.POST['transaction_date']
         transaction_detail = request.POST['transaction_detail']
         refernce_number = request.POST['refernce_number']
         account = request.POST['account']
         account_object = Account.objects.filter(operator__exact = request.user).get(pk = account)
-        print('Account name: ', account_object)
         bank = request.POST['bank']
-
         if bank:
-            bank_object = Account.objects.filter(operator__exact = request.user).get(pk = bank)
-    
-
-    
+            bank_object = Account.objects.filter(operator__exact = request.user).get(pk = bank)    
         transaction_type = request.POST['transaction_type']
         amount = request.POST['amount'] 
         amount = float(amount)
@@ -789,7 +800,7 @@ def edit_transaction(request, id):
                     account_trans_count1 = Transaction.objects.filter(operator__exact = request.user).filter(account__exact = account_object).count()
                     account_trans_count2 = Transaction.objects.filter(operator__exact = request.user).filter(bank__exact = account_object).count()
                     account_trans_count = account_trans_count1 + account_trans_count2
-                    print('Acc: ',account_trans_count )
+                    print('Acc: ',account_trans_count)
                     if account_trans_count == 1:
                         flag = 1                                 
                         account_object.balance = 0      
@@ -807,11 +818,7 @@ def edit_transaction(request, id):
                         account_object.save(force_update=True)
                     else:
                         messages.success(request, 'Transaction cannot be updated')
-                        return redirect('transaction',)
-
-
-        
-                    
+                        return redirect('transaction')        
                 else:
                     if account_trans_count == 1:
                         last_transaction_total = trans.balance_after_transaction
@@ -821,68 +828,65 @@ def edit_transaction(request, id):
                         return redirect('transaction',)
         
         else:
+            flag = 1  
             for trans in transaction_list:
-                if trans == transaction:
-                    flag = 1                                        
-                    if account_object != trans.account  and bank_object != trans.bank:
-                        account_object.balance = account_object.balance - trans.amount
-                        bank_object.balance = bank_object.balance + trans.amount  
-                    else: 
-                        account_object.balance = account_object.balance + trans.amount
-                        bank_object.balance = bank_object.balance - trans.amount            
-
+                if trans == transaction:                            
                     if transaction_type == CREDIT:
                         transaction.balance_after_transaction = last_transaction_total - amount
+                        transaction.save(force_update=True)
                     if transaction_type == DEBIT:
                         transaction.balance_after_transaction = last_transaction_total + amount
+                        transaction.save(force_update=True)
                     if transaction_type == NONE:
                         transaction.balance_after_transaction = last_transaction_total 
+                        transaction.save(force_update=True)
                     account_object.balance = account_object.balance - amount
                     bank_object.balance = bank_object.balance + amount
 
                     transaction.save(force_update=True)
                     account_object.save(force_update=True)
                     bank_object.save(force_update=True)
-                    
-        
-
+                    print("transaction q12213", transaction.balance_after_transaction)
                 else:
                     last_transaction_total = trans.balance_after_transaction
+                    transaction.save(force_update=True)
             
 
         if flag == 1:
             for trans in transaction_list:
-                print('Trans:', trans.id, 'balance:', trans.balance_after_transaction, trans.amount)
                 if trans == transaction:
                     if transaction_type == CREDIT:
-                        #account_object.balance = account_object.balance - float(amount)
-                        # bank_object.balance = bank_object.balance +  float(amount)
                         trans.balance_after_transaction = last_total - amount
                         last_total = trans.balance_after_transaction
+                        print("T C Last Balnc: ",last_total)
                     if transaction_type == DEBIT:
-                        #account_object.balance = account_object.balance - float(amount)
-                        #bank_object.balance = bank_object.balance +  float(amount)
                         trans.balance_after_transaction = last_total + amount
                         last_total = trans.balance_after_transaction
+                        print("T D Last Balnc: ",last_total)
                     if transaction_type == NONE:
-                        #account_object.balance = account_object.balance - float(amount)
-                        # bank_object.balance = bank_object.balance +  float(amount)
                         trans.balance_after_transaction = last_total
-                        last_total = trans.balance_after_transaction 
+                        last_total = trans.balance_after_transaction
+                        print("T N Last Balnc: ",last_total)
                     trans.save(force_update=True)
                 else:
                     if trans.transaction_type == CREDIT:
                         trans.balance_after_transaction = last_total - trans.amount
                         last_total = trans.balance_after_transaction
+                        print("C Last Balnc: ",last_total)
                     if trans.transaction_type == DEBIT:
                         trans.balance_after_transaction = last_total + trans.amount
                         last_total = trans.balance_after_transaction
+                        print("D Last Balnc: ",last_total)
                     if trans.transaction_type == NONE:
                         trans.balance_after_transaction = last_total
-                        last_total = trans.balance_after_transaction 
+                        last_total = trans.balance_after_transaction
+                        print("N Last Balnc: ",last_total)
                     trans.save(force_update=True)
             flag = 0
-            
+
+
+
+
         if not transaction_date:
             transaction_date = transaction.transaction_date
         
