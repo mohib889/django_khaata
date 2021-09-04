@@ -16,7 +16,7 @@
 
   <div style="margin-left:20px;margin-top:20px">
     <h4>Accounts in Book</h4>
-
+    
     {% for account in type %}
      
     <a style="text-decoration: none;" class="link-light" href="{{ account.get_absolute_url }}">
@@ -25,10 +25,15 @@
       </div>
     </a> 
   </a> 
+  <a href="{% url 'edit-book' book.id %}" class="btn btn-secondary">Edit</a>
 
     {% empty %}
 
-    <p>No Accounts</p>    
+    <p>No Accounts</p>  
+    <a href="{% url 'edit-book' book.id %}" class="btn btn-secondary">Edit</a>
+  
     {% endfor %}
+
+    
   </div> 
 {% endblock %}

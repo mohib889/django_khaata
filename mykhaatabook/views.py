@@ -343,9 +343,12 @@ def transaction_list(request):
             total_bank_balance = total_bank_balance + total_cash   
 
             print('Bank: ', total_bank_balance)
-            page_number = request.GET.get('page',2)
+            
+            
 
             paginator = Paginator(transaction_list, 25) # Show 25 contacts per page.
+            
+            page_number = request.GET.get('page', paginator.num_pages )
             try:
                 page_obj = paginator.page(page_number)
             except EmptyPage:
@@ -445,6 +448,61 @@ def add_book(request):
 
     if request.method == 'GET':
         return render(request, 'all_forms/add_book.html', context = context)
+
+
+@login_required
+def edit_book(request, id):
+    book_types = AccountsBook.objects.filter(operator__exact = request.user).all()
+    book = AccountsBook.objects.filter(operator__exact = request.user).get(pk=id)
+    book_type = book.book_type
+    type = Account.objects.filter(operator__exact = request.user).filter(book__exact = book_type)
+
+    context = {
+        'book':book,
+        'type':type,
+        'book_types':book_types,
+        'values': book,
+        'simple': SIMPLE,
+        'clear': CLEARING,
+        'hawala': HAWALA,
+        'bank': BANK,
+        'lahore': LAHORE,
+        'cash':CASH,
+        'qarz':QARZ,
+        'iran':IRAN,
+        'gadi_kharcha':GADI_KHARCHA,
+        'taftan':TAFTAN
+        
+    }
+
+    if request.method == 'POST':
+        date =  request.POST['date']
+        title = request.POST['title']
+        type = request.POST['type']
+        print('Type: ', type)
+        
+        if not title: 
+            messages.error(request, 'Title is required')
+            return render(request, 'all_forms/edit_book.html', context = context)
+        if not type:
+            messages.error(request, 'Type is required')
+            return render(request, 'all_forms/edit_book.html', context = context)
+        
+        if not date:
+            date = book.book_created_date
+
+        book.book_title = title,  
+        book.book_type = type,
+        book.book_created_date = date
+
+        book.save(force_update=True)
+        messages.success(request, 'Book saved succesfully')
+
+        return redirect('book',)
+
+    if request.method == 'GET':
+        return render(request, 'all_forms/edit_book.html', context = context)
+
 
 @login_required
 def add_account(request):
@@ -605,14 +663,17 @@ def add_transaction(request):
                     transaction_date = transaction_date.date()
                     transaction_date = str(transaction_date)
                     
-
+                last_transaction_date = last_transaction_date.strftime('%Y-%m-%d')
+                last_transaction_date = datetime.strptime(last_transaction_date, '%Y-%m-%d')                
                 current_date = datetime.strptime(transaction_date, '%Y-%m-%d')
 
+                print('last date: ', last_transaction_date, type(last_transaction_date))
 
                 print('curent date: ', current_date, type(current_date))
                 current_date = pytz.utc.localize(current_date)
+                last_transaction_date = pytz.utc.localize(last_transaction_date)
 
-                if current_date <= last_transaction_date:
+                if current_date < last_transaction_date:
                     messages.success(request, 'Date must be greater than last transaction date')
                     return redirect('add-transaction')
 
@@ -837,7 +898,7 @@ def edit_transaction(request, id):
                 transaction.account= account_object
             if bank:
                 if transaction.bank != bank_object:
-                    transaction.bank =bank_object
+                    transaction.bank = bank_object
             if transaction.transaction_type != transaction_type:
                 transaction.transaction_type =transaction_type
             if  transaction.amount != amount:

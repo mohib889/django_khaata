@@ -150,7 +150,7 @@ messages.ERROR:'danger',
 }
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
+LOGIN_REDIRECT_URL = '/'
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
