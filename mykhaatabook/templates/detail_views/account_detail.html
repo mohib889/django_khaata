@@ -1,4 +1,5 @@
 {% extends "home/layout.html" %}
+{% load static %}
 {% block breadcrumb %}
 
   <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
@@ -157,4 +158,13 @@
 
   </table>
   </div> 
+
+  <script>
+    $( function() {
+      $( "#sdatepicker" ).datepicker();
+    } );
+    $( function() {
+      $( "#edatepicker" ).datepicker();
+    } );
+    </script>
 {% endblock %}

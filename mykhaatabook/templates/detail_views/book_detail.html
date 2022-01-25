@@ -11,7 +11,7 @@
 <div class="card text-center">
   <div class="card-header">Title: {{ book.book_title }}</div>
   <div class="card-body">
-      <h5 class="card-title">{{ book.id }} Book: {% if book.book_type == '1' %} Simple {% elif book.book_type == '2' %} Clearing {% elif book.book_type == '3' %}  Hawala {% elif book.book_type == '4' %} Bank {% elif book.book_type == '5' %} Lahore {% else %} None{% endif %}</h5>
+      <h5 class="card-title">{{ book.id }} Book: {% if book.book_type == '1' %} Simple {% elif book.book_type == '2' %} Clearing {% elif book.book_type == '3' %}  Hawala {% elif book.book_type == '4' %} Bank {% elif book.book_type == '5' %} Lahore {% elif book.book_type == '6' %} Cash {% elif book.book_type == '7' %} Qarz {% elif book.book_type == '8' %} Iran {% elif book.book_type == '9' %} Gadi-Kharcha {% elif book.book_type == '10' %} Taftan {% else %} None{% endif %}</h5>
       <p class="card-text"></p>
       <a href="{% url 'edit-book' book.id %}" class="btn btn-primary">Edit</a>
   </div>

@@ -597,7 +597,7 @@ def edit_book(request, id):
         book.save(force_update=True)
         messages.success(request, 'Book saved succesfully')
 
-        return redirect('book',)
+        return redirect('book')
 
     if request.method == 'GET':
         return render(request, 'all_forms/edit_book.html', context = context)
@@ -1467,7 +1467,8 @@ def acc_export_pdf(request,id, start, end):
     'none':None,
     'total_credit': total_credit,
     'total_debit':total_debit,
-    'aTDRange':aTDRange
+    'aTDRange':aTDRange,
+    'account_balance':account_balance
 
         })
     html = HTML(string = html_string)

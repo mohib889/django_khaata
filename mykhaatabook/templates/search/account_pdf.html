@@ -54,10 +54,12 @@ th, td {
     </div>
     <br>
 
-    <div style="border: 1px black solid; width: 300px; line-height: 0.2; height: 60px; font-size: 11px;">
+    <div style="border: 1px black solid; width: 300px; line-height: 0.2; height: 75px; font-size: 11px;">
         <p style="margin-left: 5px;">Title: {{account.title}}</p>
         <p style="margin-left: 5px;">Accoun No: {{account.id}}</p>
-        <p style="margin-left: 5px;">Phone: {{account.phone_number}}</p>  
+        <p style="margin-left: 5px;">Phone: {{account.phone_number}}</p>
+        <p style="margin-left: 5px;">Balance: {{account_balance}}</p>
+        
         <p style="margin-left: 5px;">From Date: {{start}}  To  {{end}}</p>
 
         
@@ -129,7 +131,7 @@ th, td {
     </tbody>
     
 
-    <tfoot>
+    <!-- <tfoot>
       <tr>
        
         <td colspan="8">TOTAL CREDIT/DEBIT:</td>
@@ -138,7 +140,7 @@ th, td {
         
   
       </tr>
-    </tfoot>
+    </tfoot> -->
       
   </table>
 

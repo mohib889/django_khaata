@@ -15,18 +15,18 @@
   {% if search_result %}
 
   
-  <table class="table table-dark table-striped table-hover">
-    <thead>
+  <table class="table table-hover">
+    <thead class="l-bg-blue-dark">
 
       <tr>
         <th scope="col">Date</th>
         <th scope="col">Reference Number</th>
         <th scope="col">Details</th>
-        <th scope="col">Credit Account</th>
-        <th scope="col">Debit Account</th>
-        <th scope="col">Credit</th>
-        <th scope="col">Debit</th>
-        <th scope="col">Balance</th>
+        <th scope="col">From Account</th>
+        <th scope="col">To Account</th>
+        <th scope="col">Amount</th>
+        <!-- <th scope="col">Debit</th>
+        <th scope="col">Balance</th> -->
         <th scope="col">Slip</th>
       </tr>
     </thead>
@@ -39,22 +39,23 @@
         <td>{{ trans.account }}</td>
         <td>{{ trans.bank }}</td>
         <td>
-          {% if trans.transaction_type == credit  %}
           {{ trans.amount }}
-          {% endif %}
+          <!-- {% if trans.transaction_type == credit  %}
+          {{ trans.amount }}
+          {% endif %} -->
         </td>
-        <td class="text-danger ">
+        <!-- <td class="text-danger ">
           {% if trans.transaction_type == debit  %}
           {{ trans.amount }}
           {% endif %}
-        </td>
+        </td> -->
 
-        <td >
+        <!-- <td >
           {{ trans.balance_after_transaction }}
-        </td>
-        <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
-          <div class="p-0 mb-2 bg-dark bg-gradient ">
-          Slip {{trans.id}}
+        </td> -->
+        <td><a style="text-decoration: none;" class="link-dark" href="{{ trans.get_absolute_url }}"> 
+          <div class="p-0 mb-1 bg-secondary btn ">
+          View
         </div> </a></td>
 
         
