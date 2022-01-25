@@ -6,18 +6,33 @@
   <li class="breadcrumb-item active" aria-current="page">{{account.title}}</li>
   {% endblock %}
 {% block content %}
-  <h1>Title: {{ account.title }}</h1>
-  {% include 'partials/messages.html' %}
-  <div class="card text-dark bg-dark border-info mb-3" style="max-width: 35rem;">
-    <div class="card body">
+{% include 'partials/messages.html' %}
+<div class="card text-center">
+  <div class="card-header">{{ account.id }}</div>
+  <div class="card-body">
+      <h5 class="card-title">Title: {{ account.title }}</h5>
+      <!-- <p class="card-text">Type: {{ account.book }}</p> -->
+      <p class="card-text">Phone: {{ account.phone_number }}</p>
+      <p class="card-text">Address: {{ account.address }}</p>
+      <p class="card-text">Balance: {{ account.balance }}</p>
 
-      <div class="row ml-2">
-        <div class="col-9 gx-5">
+      <!-- <a href="#" class="btn btn-primary">Know more</a> -->
+  </div>
+  <div class="card-footer text-muted"> {{ account.date_created }} </div>
+</div>  
 
-          <p class="text-start "><strong>ID:</strong> <a href="">{{ account.id }}</a></p> 
-          <p class="text-center"><strong>{{ account.title }}</strong> </p>
+<!-- <h1>Title: {{ account.title }}</h1> -->
+  
+  <!-- <div class="card text-dark bg-dark border-info mb-3" style="max-width: 35rem;"> -->
+    <!-- <div class="card body"> -->
 
-        </div>
+      <!-- <div class="row ml-2">
+        <div class="col-9 gx-5"> -->
+
+          <!-- <p class="text-start "><strong>ID:</strong> <a href="">{{ account.id }}</a></p>  -->
+          <!-- <p class="text-center"><strong>{{ account.title }}</strong> </p> -->
+
+        <!-- </div>
 
         <div class="col-4">
 
@@ -25,33 +40,34 @@
           <p  class="text-center"><strong>Type:</strong> {{ account.book }} </p>
           <p class="text-center"><strong>Balance:</strong> {{ account.balance }}</p>
 
-        </div>
-        <div class="col-6 ">
+        </div> -->
+        <!-- <div class="col-6 ">
           <p class="text-end" ><strong>Phone no:</strong> {{ account.phone_number }}</p>
           <p class="text-end"><strong>Address:</strong> {{ account.address }}</p>
-          <p class="text-end"><strong>Date Created:</strong> {{ account.date_created }}</p>
+          <p class="text-end"><strong>Date Created:</strong></p>
 
         </div>
       </div>
     </div>
 
-  </div>
+  </div> -->
 
   <div class="row">
     <div class="col">
       <div class="card card-body">
-        <form action="{% url 'date_range_account' id %}" method="get" class="align-right">
+        <form action="{% url 'date_range_account' id %}" method="post" class="align-right">
+          {% csrf_token %}
           <div class="row">
             <div class="col" >
-              <input class="form-control form-control-sm" type="date" name='start'>
+              <input class="form-control form-control-sm" id="sdatepicker"  placeholder="From Date" type="text" name='start'>
             </div>
 
             <div class="col">
-              <input  class="form-control form-control-sm" type="date" name='end'>
+              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date"  type="text" name='end'>
             </div>
 
             <div class="col" >
-              <input class=" form-control form-control-sm btn btn-info" type="submit" name="date_range"  value="Print" id="">
+              <input class=" form-control form-control-sm btn btn-info l-bg-blue-dark" type="submit" name="date_range"  value="Submit" id="">
             </div>
           </div>
 
@@ -66,11 +82,11 @@
 
     {% if transactions %}
 
-  <table class="table table-dark table-striped table-hover">
-    <thead>
+  <table class="table table-hover">
+    <thead class="l-bg-blue-dark">
       <tr>
+        <th scope="col">#</th>
         <th scope="col">Date</th>
-        <th scope="col">Id</th>
         <th scope="col">Details</th>
         <th scope="col">Account</th>
         <th scope="col">Credit</th>
@@ -85,8 +101,9 @@
 
           
         <tr>
-          <th scope="row">{{ trans.transaction_date | date:"F d Y" }}</th>
-          <td>{{ trans.id }}</td>
+          <th>{{forloop.counter}}</th>
+          <td scope="row">{{ trans.transaction_date | date:"F d Y" }}</td>
+         
           <td>{{ trans.transaction_detail }}</td>
           <td>
             {% if trans.account ==  account %}  
@@ -117,9 +134,9 @@
         </td>
 
         <td>{{ item }}</td>
-          <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
-            <div class="p-0 mb-2 bg-dark bg-gradient ">
-            Slip {{trans.id}}
+          <td><a style="text-decoration: none;" class="link-dark" href="{{ trans.get_absolute_url }}"> 
+            <div class="p-0 mb-2 bg-secondary btn ">
+            View
           </div> </a></td>
   
         </tr>

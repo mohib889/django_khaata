@@ -11,20 +11,18 @@
   <h1>Result</h1>
 
   {% include 'partials/messages.html' %}
-
-  {% if transactions %}
+  {% if aTDRange %}
 
   <p>Date: {{start}}  to {{end}}</p>
   
-  <table class="table table-dark table-striped table-hover">
-    <thead>
+  <table class="table table-hover">
+    <thead class="l-bg-blue-dark">
 
       <tr>
+        <th scope="col">#</th>
         <th scope="col">Date</th>
-        <th scope="col">Reference Number</th>
         <th scope="col">Details</th>
-        <th scope="col">Credit Account</th>
-        <th scope="col">Debit Account</th>
+        <th scope="col">Account</th>
         <th scope="col">Credit</th>
         <th scope="col">Debit</th>
         <th scope="col">Balance</th>
@@ -32,47 +30,57 @@
       </tr>
     </thead>
     <tbody>
-      {% for trans, item in list %}
-
-      {% if trans.transaction_date|date:"Ymd" >= start|date:"Ymd" and trans.transaction_date|date:"Ymd" <= end|date:"Ymd"  %}      
-      
-      
+      {% for balance , trans in list %}      
       <tr>
-        <th scope="row">{{ trans.transaction_date  | date:"F d Y" }}</th>
-        <td>{{ trans.refernce_number }}</td>
+        <th scope="col">{{forloop.counter}}</th>
+        <td scope="row">{{ trans.transaction_date  | date:"F d Y" }}</td>
         <td>{{ trans.transaction_detail }}</td>
-        <td>{{ trans.account }}</td>
-        <td>{{ trans.bank }}</td>
+        <td>{% if trans.account ==  account %}  
+          {{ trans.bank }}
+      {% else %}
+          {{ trans.account }}
+      {% endif %}  </td>
+        
         <td>
-          {% if trans.transaction_type == credit  %}
+          {% if trans.account == account and trans.bank == none and trans.transaction_type == credit%}
           {{ trans.amount }}
-          {% endif %}
+      {% endif %}
+
+      {% if trans.account == account and trans.bank != none %}
+        {{ trans.amount }}
+      {% endif %}
         </td>
         <td class="text-danger ">
-          {% if trans.transaction_type == debit  %}
-          {{ trans.amount }}
-          {% endif %}
+          {% if trans.account == account and trans.bank == none and trans.transaction_type == debit %}
+              {{ trans.amount }}
+            {% endif %}
+
+            {% if trans.bank == account and trans.account != none %}
+              {{ trans.amount }}
+            {% endif %}
         </td>
 
-        <td>{{ item }}</td>
+        <td>{{ balance }}</td>
         <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
           <div class="p-0 mb-2 bg-dark bg-gradient ">
           Slip {{trans.id}}
         </div> </a></td>
 
-        
+      
       </tr>
-      {% endif %}
+      
       {% endfor %}
     </tbody>
 
     <tfoot>
       <tr>
        
-        <td colspan="5">TOTAL CREDIT/DEBIT:</td>
+        <td colspan="4">TOTAL CREDIT/DEBIT:</td>
         <td colspan="1">{{total_credit}}</td>
         <td colspan="1" class="text-danger">{{total_debit}}</td>
-        <td colspan="2"></td>
+        <td colspan="2">
+          {{ range_balance_list|last }}
+        </td>
   
       </tr>
     </tfoot>
@@ -80,7 +88,7 @@
   
   </table>
 
-  <a href="{% url 'export-pdf' start end %}" class="btn btn-info">
+  <a href="{% url 'acc-export-pdf' id start end %}" class="btn btn-info l-bg-blue-dark">
       Print
   </a>
     {% else %}

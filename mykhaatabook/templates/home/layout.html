@@ -6,26 +6,139 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-  <!-- Add additional CSS in static file -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+   <!-- Add additional CSS in static file -->
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  <script>
+    $( function() {
+      $( "#sdatepicker" ).datepicker();
+    } );
+    $( function() {
+      $( "#edatepicker" ).datepicker();
+    } );
+    </script>
+
+<!-- selectBS -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="choosen.js"></script>
 </head>
 <body>
-  
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');
+body {
+    
+    font-family: 'Manrope', sans-serif
+}
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90,97,105,0.1), 0 0.9375rem 1.40625rem rgba(90,97,105,0.1), 0 0.25rem 0.53125rem rgba(90,97,105,0.12), 0 0.125rem 0.1875rem rgba(90,97,105,0.1);
+}
+.l-bg-cherry {
+    background: linear-gradient(to right, #493240, #f09) !important;
+    color: #fff;
+}
+
+.l-bg-blue-dark {
+    background: linear-gradient(to right, #373b44, #4286f4) !important;
+    color: #fff;
+}
+
+.l-bg-green-dark {
+    background: linear-gradient(to right, #0a504a, #38ef7d) !important;
+    color: #fff;
+}
+
+.l-bg-orange-dark {
+    background: linear-gradient(to right, #a86008, #ffba56) !important;
+    color: #fff;
+}
+
+.card .card-statistic-3 .card-icon-large .fas, .card .card-statistic-3 .card-icon-large .far, .card .card-statistic-3 .card-icon-large .fab, .card .card-statistic-3 .card-icon-large .fal {
+    font-size: 110px;
+}
+
+.card .card-statistic-3 .card-icon {
+    text-align: center;
+    line-height: 40px;
+    margin-left: 15px;
+    color: #000;
+    position: absolute;
+    right: -5px;
+    top: 20px;
+    opacity: 0.1;
+}
+
+.l-bg-cyan {
+    background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
+    color: #fff;
+}
+
+.l-bg-green {
+    background: linear-gradient(135deg, #23bdb8 0%, #43e794 100%) !important;
+    color: #fff;
+}
+
+.l-bg-orange {
+    background: linear-gradient(to right, #f9900e, #ffba56) !important;
+    color: #fff;
+}
+
+.l-bg-cyan {
+    background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
+    color: #fff;
+}
+
+
+    .nav-link {
+    border-radius: 0px !important;
+    transition: all 0.5s;
+    width: 100px;
+    display: flex;
+    flex-direction: column
+}
+
+.nav-link small {
+    font-size: 12px
+}
+
+.nav-link:hover {
+    background-color: #52525240 !important
+}
+
+.nav-link .fa {
+    transition: all 1s;
+    font-size: 20px
+}
+
+.nav-link:hover .fa {
+    transform: rotate(360deg)
+}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
   <div class="container-fluid">
     {% block brand %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg l-bg-blue-dark">
         <div class="container">
           <a class="navbar-brand" href="{% url 'index' %}">Khaatabook</a>
         </div>
       </nav>
     {% endblock %}
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+      <nav aria-label="breadcrumb l-bg-orange-dark">
+        <ol class="breadcrumb l-bg-orange-dark">
           
-          <div class="breadcrumb container mt-3 p-2" style="background-color:wheat;">
+          <div class="breadcrumb container mt-3 p-2 l-bg-orange-dark " >
             {% block breadcrumb %}
 
             {% endblock %}
@@ -34,51 +147,48 @@
         </ol>
       </nav>
     
-    <div class="row">
-      <div class="col-sm-2">
+    <div class="m-1 row">
+      <div class="col-sm-2 d-flex flex-column flex-shrink-0 l-bg-blue-dark vh-50" >
       {% block sidebar %}
-        <ul class="sidebar-nav">
-          <li>
-            <a style="text-decoration: none;" class="link-light" href="{% url 'index' %}">
-            <div class="p-3 mb-2 bg-dark bg-gradient ">
-Home            </div>
+      
+        <ul class="nav nav-pills nav-flush flex-column mb-auto text-center l-bg-blue-dark" >
+          <li class="nav-item mx-auto">
+            <a class="nav-link py-3 border-bottom text-white" href="{% url 'index' %}">
+              <i class="fa fa-home"></i> <small>Home</small>
            </a> 
         </li>
-        <li>
-          <a style="text-decoration: none;" class="link-light" href="{% url 'book' %}">
-          <div class="p-3 mb-2 bg-dark bg-gradient ">
-           All Books
-          </div>
+        <li class="nav-item mx-auto">
+          <a class="nav-link py-3 border-bottom text-white" href="{% url 'book' %}">
+            <i class="fa fa-solid fa-swatchbook"></i> <small>Books</small>
          </a> 
       </li>
-      <li>
-        <a style="text-decoration: none;" class="link-light" href="{% url 'account' %}">
-        <div class="p-3 mb-2 bg-dark bg-gradient ">
-         All Accounts
-        </div>
+      <li class="nav-item mx-auto">
+        <a class="nav-link py-3 border-bottom text-white" href="{% url 'account' %}">
+          <i class="fa fa-solid fa-file-invoice"></i> <small>Accounts</small>
        </a> 
     </li>
-    <li>
-      <a style="text-decoration: none;" class="link-light" href="{% url 'transaction' %}">
-      <div class="p-3 mb-2 bg-dark bg-gradient ">
-      Transactions
-      </div>
+    <li class="nav-item mx-auto">
+      <a class="nav-link py-3 border-bottom text-white" href="{% url 'transaction' %}">
+        <i class="fa fa-solid fa-newspaper"></i> <small>Transactions</small>
      </a> 
+  </li>
+  <li>
+    <ul class="sidebar-nav">
+      
+      {% if user.is_authenticated %}
+        <li>User: {{ user.get_username }}</li>
+        <li><a href="{% url 'logout' %}?next={{request.path}}">Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>
+      {% endif %} 
+     </ul> 
   </li>
 
 
         </ul>
 
 
-        <ul class="sidebar-nav">
-      
-         {% if user.is_authenticated %}
-           <li>User: {{ user.get_username }}</li>
-           <li><a href="{% url 'logout' %}?next={{request.path}}">Logout</a></li>
-         {% else %}
-           <li><a href="{% url 'login' %}?next={{request.path}}">Login</a></li>
-         {% endif %} 
-        </ul> 
+        
      {% endblock %}
 
       </div>

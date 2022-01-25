@@ -1,5 +1,6 @@
 {% extends "home/layout.html" %}
 
+{% load static %}
 {% block breadcrumb %}
  
   <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
@@ -8,8 +9,8 @@
   {% endblock %}
 
 {% block content %}
-  <h1>Transaction List</h1>
-
+ <h1>Transaction List</h1>
+ 
   {% include 'partials/messages.html' %}
 
   {% if page_obj %}
@@ -26,7 +27,7 @@
             </div>
 
             <div class="col">
-              <input class="form-control form-control-sm btn-sm btn-info"  type="submit" name="" value="Search" id="">
+              <input class="form-control form-control-sm btn-sm btn-info l-bg-blue-dark"  type="submit" name="" value="Search" id="">
             </div>
 
           </div>
@@ -37,22 +38,32 @@
       </div>
     </div>
   </div>
+  <!-- <div class="container mt-100">
+    <div class="card">
+        <div class="row">
+            <div class="col-md-4"> <label>From</label> <input type="text" class="form-control"> </div>
+            <div class="col-md-4"> <label>To</label> <input type="text" class="form-control"> </div>
+            <div class="col-md-4"> <label>Search</label> <button class="btn btn-primary pro-button w-100">Add a trip <i class="fa fa-plane ml-2"></i></button> </div>
+        </div>
+    </div>
+</div> -->
 
   <div class="row">
     <div class="col">
       <div class="card card-body">
-        <form action="{% url 'date_range'%}" method="get" class="align-right">
+        <form action="{% url 'date_range'%}" method="post" class="align-right">
+          {% csrf_token %}
           <div class="row">
             <div class="col" >
-              <input class="form-control form-control-sm" type="date" name='start'>
+              <input class="form-control form-control-sm" id="sdatepicker" type="text" placeholder="From Date" name='start'>
             </div>
 
             <div class="col">
-              <input  class="form-control form-control-sm" type="date" name='end'>
+              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date" type="text" name='end'>
             </div>
 
             <div class="col" >
-              <input class=" form-control form-control-sm btn btn-info" type="submit" name="date_range"  id="">
+              <input class=" form-control form-control-sm btn btn-info l-bg-blue-dark" type="submit" name="date_range"  id="">
             </div>
           </div>
 
@@ -64,46 +75,48 @@
 
   
   
-  <table class="table table-dark table-striped table-hover">
-    <thead>
+  <table class="table table-hover">
+    <thead class="l-bg-blue-dark">
 
       <tr>
+        <th scope="col">#</th>
         <th scope="col">Date</th>
         <th scope="col">Reference Number</th>
         <th scope="col">Details</th>
-        <th scope="col">Credit Account</th>
-        <th scope="col">Debit Account</th>
-        <th scope="col">Credit</th>
-        <th scope="col">Debit</th>
-        <th scope="col">Balance</th>
+        <th scope="col">From Account</th>
+        <th scope="col">To Account</th>
+        <th scope="col">Amount</th>
+        <!-- <th scope="col">Debit</th> -->
+        <!-- <th scope="col">Balance</th> -->
         <th scope="col">Slip</th>
       </tr>
     </thead>
     <tbody>
-      {% for trans in page_obj %}
+      {% for trans, balnc in zippedList %}
       <tr>
-        <th scope="row">{{ trans.transaction_date | date:"F d Y" }}</th>
+        <th>{{forloop.counter}}</th>
+        <td scope="row">{{ trans.transaction_date | date:"F d Y" }}</td>
         <td>{{ trans.refernce_number }}</td>
         <td>{{ trans.transaction_detail }}</td>
         <td>{{ trans.account }}</td>
         <td>{{ trans.bank }}</td>
         <td>
-          {% if trans.transaction_type == credit  %}
+          
           {{ trans.amount }}
-          {% endif %}
+          
         </td>
-        <td class="text-danger ">
-          {% if trans.transaction_type == debit  %}
+        <!-- <td class="text-danger ">
+          
           {{ trans.amount }}
-          {% endif %}
+          
         </td>
 
         <td >
-          {{ trans.balance_after_transaction }}
-        </td>
-        <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
-          <div class="p-0 mb-2 bg-dark bg-gradient ">
-          Slip {{trans.id}}
+          {{ balnc }}
+        </td> -->
+        <td><a style="text-decoration: none;" class="link-dark" href="{{ trans.get_absolute_url }}"> 
+          <div class="p-0 mb-1 bg-secondary btn ">
+          View
         </div> </a></td>
 
         
@@ -112,11 +125,12 @@
       {% endfor %}
     </tbody>
     {% if not page_obj.has_next %}
-    <tfoot>
+    
+    <!-- <tfoot>
       
     <tr>
        
-      <td colspan="5">TOTAL CREDIT/DEBIT:</td>
+      <td colspan="4">TOTAL CREDIT/DEBIT:</td>
       <td colspan="1">{{total_credit}}</td>
       <td colspan="1" class="text-danger">{{total_debit}}</td>
       <td colspan="2"></td>
@@ -125,32 +139,32 @@
     
     <tr>
        
-      <td colspan="7">TOTAL BANK:</td>
+      <td colspan="6">TOTAL BANK:</td>
       <td colspan="2">{{total_bank_balance}}</td>
       
     </tr>
 
     <tr>
        
-      <td colspan="7">TOTAL CLEARING:</td>
+      <td colspan="6">TOTAL CLEARING:</td>
       <td colspan="2">{{total_clearing}}</td>
       
     </tr>
 
     <tr>
        
-      <td colspan="7">TOTAL HAWALA:</td>
+      <td colspan="6">TOTAL HAWALA:</td>
       <td colspan="2">{{total_hawala}}</td>
       
     </tr>
-  </tfoot>
+  </tfoot> -->
 
   {% endif %}
   
   </table>
      
   <div class="col-md-2">
-    <a href="{% url 'add-transaction' %}" class="btn btn-primary">
+    <a href="{% url 'add-transaction' %}" class="btn btn-primary l-bg-blue-dark">
       <i class="bi bi-plus-circle"></i>   
          Add Transaction</a>
   </div>

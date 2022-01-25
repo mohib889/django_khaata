@@ -7,14 +7,21 @@
     <title>PDF Export</title>
    
     <style>
-        
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');
 
         table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
   font-size:11px
 }
-
+body {
+    
+    font-family: 'Manrope', sans-serif
+}
+.l-bg-blue-dark {
+    background: linear-gradient(to right, #373b44, #4286f4) !important;
+    color: #fff;
+}
 table.center {
   margin-left: auto;
   margin-right: auto;
@@ -46,13 +53,11 @@ th, td {
         <caption style="font-size: 9px;">Tag line</caption>
     </div>
     <br>
-    <div style="border: 1px black solid; width: 300px; line-height: 0.3; height: 100px; font-size: 11px;">
+    <div style="border: 1px black solid; width: 300px; line-height: 0.2; height: 60px; font-size: 11px;">
         <p style="margin-left: 5px;">Title: Mohib</p>
         <p style="margin-left: 5px;">Accoun No: 124345</p>
-        <p style="margin-left: 5px;">Address: xyz</p>
         <p style="margin-left: 5px;">Phone: 124345</p>
-        <p style="margin-left: 5px;">Date: 12/43/45</p>
-        <p style="margin-left: 5px;">From Date: {{start}}  To Date{{end}}</p>
+        <p style="margin-left: 5px;">From Date: {{start}}  To Date: {{end}}</p>
 
         
     </div>
@@ -62,7 +67,7 @@ th, td {
   
   <table class="table" style="width:700px">
     
-    <thead class="thead">
+    <thead class="thead  l-bg-blue-dark">
 
       <tr>
         <th>Date</th>
@@ -70,9 +75,10 @@ th, td {
         <th colspan="2">Details</th>
         <th>Credit Account</th>
         <th>Debit Account</th>
-        <th>Credit</th>
-        <th>Debit</th>
-        <th>Balance</th>
+        <th>Amount</th>
+        <!-- <th>Credit</th> -->
+        <!-- <th>Debit</th> -->
+        <!-- <th>Balance</th> -->
         
       </tr>
     </thead>
@@ -84,20 +90,22 @@ th, td {
         <td colspan="2">{{ trans.transaction_detail }}</td>
         <td>{{ trans.account }}</td>
         <td>{{ trans.bank }}</td>
+        
         <td>
-          {% if trans.transaction_type == credit  %}
           {{ trans.amount }}
-          {% endif %}
+          <!-- {% if trans.transaction_type == credit  %}
+          {{ trans.amount }}
+          {% endif %} -->
         </td>
-        <td class="text-danger" style="color: red;">
+        <!-- <td class="text-danger" style="color: red;">
           {% if trans.transaction_type == debit  %}
           {{ trans.amount }}
           {% endif %}
-        </td>
+        </td> -->
 
-        <td >
+        <!-- <td >
           {{ trans.balance_after_transaction }}
-        </td>
+        </td> -->
         
       </tr>
 

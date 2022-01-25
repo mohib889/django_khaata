@@ -23,6 +23,7 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
+    path('',RedirectView.as_view(url='/mykhaatabook/')),
     path('admin/', admin.site.urls),
     path('mykhaatabook/', include('mykhaatabook.urls')),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password/password_reset_done.html'), name='password_reset_done'),

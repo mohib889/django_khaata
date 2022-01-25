@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,19 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Export</title>
-   
     <style>
-        
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');
 
         table, th, td {
   border: 1px solid gray;
   border-collapse: collapse;
   font-size:11px
 }
-
+.l-bg-blue-dark {
+    background: linear-gradient(to right, #373b44, #4286f4) !important;
+    color: #fff;
+}
 table.center {
   margin-left: 0;
   margin-right: 0;
+}
+body {
+    
+    font-family: 'Manrope', sans-serif
 }
 th, td {
   padding: 1px  ;
@@ -42,27 +49,26 @@ th, td {
 <body>
 
     <div style="line-height: 0.1;">
-        <h2 style="font-family: Arial, Helvetica, sans-serif;">{{Campany_name}}</h2>
-        <p style="font-size: 11px; font-family: Arial, Helvetica, sans-serif;">{{tagline}}</p>
+        <h2 class="text-center" style="font-family: Arial, Helvetica, sans-serif;">{{Campany_name}} Company Name</h2>
+        <p style="font-size: 11px; font-family: Arial, Helvetica, sans-serif;">{{tagline}} Hello</p>
     </div>
     <br>
-    <div style="border: 1px black solid; width: 300px; line-height: 0.3; height: 100px; font-size: 11px;">
+
+    <div style="border: 1px black solid; width: 300px; line-height: 0.2; height: 60px; font-size: 11px;">
         <p style="margin-left: 5px;">Title: {{account.title}}</p>
         <p style="margin-left: 5px;">Accoun No: {{account.id}}</p>
-        <p style="margin-left: 5px;">Address: {{account.address}}</p>
-        <p style="margin-left: 5px;">Phone: {{account.phone_number}}</p>
-        <p style="margin-left: 5px;">Date: {{account.date_created}}</p>
+        <p style="margin-left: 5px;">Phone: {{account.phone_number}}</p>  
         <p style="margin-left: 5px;">From Date: {{start}}  To  {{end}}</p>
 
         
     </div>
 <br>
-    {% if transactions %}
+    {% if aTDRange %}
 
   
   <table class="table" style="width:700px">
     
-    <thead class="thead">
+    <thead class="thead l-bg-blue-dark">
 
       <tr>
         <th colspan="1">Date</th>
@@ -74,10 +80,10 @@ th, td {
         <th colspan="1">Balance</th>
         
       </tr>
-    </thead>
+    </thead >
     <tbody>
-        {% for trans, item in list %}
-        {% if trans.transaction_date|date:"Ymd" >= start|date:"Ymd" and trans.transaction_date|date:"Ymd" <= end|date:"Ymd"  %}      
+        {% for item, trans in list %}
+       
 
         <tr>
           <th colspan="1" scope="row">{{ trans.transaction_date | date:"F d Y" }}</th>
@@ -118,10 +124,10 @@ th, td {
 
 
 
-      {% endif %}
+     
       {% endfor %}
     </tbody>
-    {% if trans.transaction_date|date:"Ymd" >= start|date:"Ymd" and trans.transaction_date|date:"Ymd" <= end|date:"Ymd"  %}      
+    
 
     <tfoot>
       <tr>
@@ -133,10 +139,7 @@ th, td {
   
       </tr>
     </tfoot>
-    
-    {% endif %}
-  
-  
+      
   </table>
 
     {% else %}

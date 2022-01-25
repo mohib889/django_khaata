@@ -7,31 +7,40 @@
   <li class="breadcrumb-item active" aria-current="page">{{book.book_title}}</li>
   {% endblock %}
 {% block content %}
-  <h1>Title: {{ book.book_title }}</h1>
 
-  <p><strong>ID:</strong> <a href="">{{ book.id }}</a></p> 
+<div class="card text-center">
+  <div class="card-header">Title: {{ book.book_title }}</div>
+  <div class="card-body">
+      <h5 class="card-title">{{ book.id }} Book: {% if book.book_type == '1' %} Simple {% elif book.book_type == '2' %} Clearing {% elif book.book_type == '3' %}  Hawala {% elif book.book_type == '4' %} Bank {% elif book.book_type == '5' %} Lahore {% else %} None{% endif %}</h5>
+      <p class="card-text"></p>
+      <a href="{% url 'edit-book' book.id %}" class="btn btn-primary">Edit</a>
+  </div>
+  <div class="card-footer text-muted">{{ book.book_created_date }}</div>
+</div>
+  
+
+  <!-- <p><strong>ID:</strong> <a href="">{{ book.id }}</a></p> 
   <p><strong>Title:</strong> {{ book.book_title }}</p>
-  <p  ><strong>Type:</strong> {% if book.book_type == '1' %} Simple {% elif book.book_type == '2' %} Clearing {% elif book.book_type == '3' %}  Hawala {% elif book.book_type == '4' %} Bank {% elif book.book_type == '5' %} Lahore {% else %} None{% endif %} </p>
-  <p><strong>Date Created:</strong> {{ book.book_created_date }}</p>
-
+  <p><strong>Type:</strong> {% if book.book_type == '1' %} Simple {% elif book.book_type == '2' %} Clearing {% elif book.book_type == '3' %}  Hawala {% elif book.book_type == '4' %} Bank {% elif book.book_type == '5' %} Lahore {% else %} None{% endif %} </p>
+  <p><strong>Date Created:</strong> {{ book.book_created_date }}</p> -->
+  <!-- <a href="{% url 'edit-book' book.id %}" class="btn btn-secondary">Edit</a> -->
   <div style="margin-left:20px;margin-top:20px">
     <h4>Accounts in Book</h4>
     
     {% for account in type %}
      
-    <a style="text-decoration: none;" class="link-light" href="{{ account.get_absolute_url }}">
-      <div class="p-3 mb-2 bg-dark bg-gradient ">
+    <a style="text-decoration: none;" class="list-group-item list-group-item-action list-group-item-light" href="{{ account.get_absolute_url }}">
+      <div class="p-3 mb-2 ">
         {{ account.title }}
       </div>
+      
     </a> 
-  </a> 
-  <a href="{% url 'edit-book' book.id %}" class="btn btn-secondary">Edit</a>
+
+  
 
     {% empty %}
 
     <p>No Accounts</p>  
-    <a href="{% url 'edit-book' book.id %}" class="btn btn-secondary">Edit</a>
-  
     {% endfor %}
 
     

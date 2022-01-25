@@ -121,14 +121,13 @@ class Account(models.Model):
 
 class Transaction(models.Model):
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-
     transaction_date = models.DateTimeField()
     refernce_number = models.CharField(default='000000', max_length=366)
     transaction_detail = models.CharField(max_length=210, default="")
 
     account = models.ForeignKey(
         Account,
-        related_name='r_account',
+        related_name='from_account',
         on_delete=models.CASCADE, help_text="وہ کھاتہ جہاں سے رقم جمع ہو",
         default=0,
          null=True,
@@ -137,7 +136,7 @@ class Transaction(models.Model):
     
     bank = models.ForeignKey(
          Account,
-         related_name='r_bank',
+         related_name='to_account',
          on_delete=models.CASCADE,
          help_text="اکاؤنٹ جس میں رقم جمع کی جائے گی",
          default=0,

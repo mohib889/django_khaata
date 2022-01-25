@@ -6,14 +6,14 @@
   {% endblock %}
 
 {% block content %}
-  <h1>Book List</h1>
+  <h1 >Book List</h1>
   {% include 'partials/messages.html' %}
 
   {% if all_books %}
-  <ul>
+  <ul class="list-group">
     {% for book in all_books %}
-      <a style="text-decoration: none;" class="link-light" href="{{ book.get_absolute_url }}">
-        <div class="p-3 mb-2 bg-dark bg-gradient ">
+      <a style="text-decoration: none;" class="list-group-item list-group-item-action list-group-item-light" href="{{ book.get_absolute_url }}">
+        <div class="p-3 mb-2 ">
           {{ book.book_title }}
         </div>
       </a> 
@@ -24,9 +24,9 @@
   {% endif %} 
 
 
-  <div class="col-md-2">
+  <div class="col-md-2 m-2">
     
-    <a href="{% url 'add-book' %}" class="btn btn-primary">
+    <a href="{% url 'add-book' %}" class="btn btn-primary l-bg-blue-dark">
       <i class="bi bi-plus-circle"></i>
       Add Book</a>
   </div>

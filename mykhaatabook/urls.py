@@ -1,7 +1,9 @@
 from django.urls import path
+from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = [
+#path('',RedirectView.as_view(url='/mykhaatabook/login')),
 path('', views.index, name='index'),
 path('book/', views.book_list, name='book'),
 path('book/<int:id>', views.book_detail, name='accountsbook-detail'),
@@ -22,7 +24,8 @@ path("register/", views.register_request, name="register"),
 path("login/", views.login_request, name="login"),
 path("logout/", views.logout_request, name= "logout"),
 path("password_reset/", views.password_reset_request, name="password_reset"),
-path("export-pdf/<str:start>/<str:end>", views.export_pdf, name = "export-pdf")
+path("export-pdf/<str:start>/<str:end>", views.export_pdf, name = "export-pdf"),
+path("acc-export-pdf/<int:id>/<str:start>/<str:end>", views.acc_export_pdf, name = "acc-export-pdf")
 ]
 
 

@@ -1,16 +1,118 @@
 {% extends "home/layout.html" %}
 {% block breadcrumb %}
-<li class="breadcrumb-item active" aria-current="page">Home</li>
+<li class="breadcrumb-item active text-white" aria-current="page">Home</li>
 {% endblock %}
 
 {% block content %}
 {% include 'partials/messages.html' %}
-  <p>Welcome to Hisaab Web App, a website developed by <em>Mohib Khan</em>!</p>
+  <!-- <p>Welcome to Hisaab Web App, a website developed by <em>Mohib Khan</em>!</p>
 
 
   <h2>Dynamic content</h2>
-  <p>The App has the following record counts:</p>
-  <ul>
+  <p>The App has the following record counts:</p> -->
+<!-- Test -->
+
+
+
+
+<div class="m-4 col-md-10 ">
+    <div class="row ">
+        <div class="col-xl-6 col-lg-12">
+            <div class="card l-bg-blue-dark">
+                <div class="card-statistic-3 p-4">
+                    <div class="card-icon card-icon-large"><i class="bi fa-7x bi-bank"></i></div>
+                    <div class="mb-4">
+                     <h5 class="card-title mb-0">Banks</h5>
+                    </div>
+                    <div class="row align-items-center mb-2 d-flex">
+                        <div class="col-8">
+                            <h2 class="d-flex align-items-center mb-0">
+                                {{ all_bank_balance | last }}
+                            </h2>
+                        </div>
+                        <!-- <div class="col-4 text-right">
+                            <span>12.5% <i class="fa fa-arrow-up"></i></span>
+                        </div> -->
+                    </div>
+                    <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                        <div class="progress-bar l-bg-orange" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-12">
+            <div class="card l-bg-blue-dark">
+                <div class="card-statistic-3 p-4">
+                    <div class="card-icon card-icon-large"><i class="fas fa-7x fa-exchange-alt"></i></div>
+                    <div class="mb-4">
+                        <h5 class="card-title mb-0">Hawala</h5>
+                    </div>
+                    <div class="row align-items-center mb-2 d-flex">
+                        <div class="col-8">
+                            <h2 class="d-flex align-items-center mb-0">
+                                {{hawala_blnc_list | last}}
+                            </h2>
+                        </div>
+                        <!-- <div class="col-4 text-right">
+                            <span>9.23% <i class="fa fa-arrow-up"></i></span>
+                        </div> -->
+                    </div>
+                    <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                        <div class="progress-bar l-bg-orange" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-12">
+            <div class="card l-bg-blue-dark">
+                <div class="card-statistic-3 p-4">
+                    <div class="card-icon card-icon-large"><i class="fas fa-ticket-alt"></i></div>
+                    <div class="mb-4">
+                        <h5 class="card-title mb-0">Clearing</h5>
+                    </div>
+                    <div class="row align-items-center mb-2 d-flex">
+                        <div class="col-8">
+                            <h2 class="d-flex align-items-center mb-0">
+                                {{clearing_blnc_list | last}}
+                            </h2>
+                        </div>
+                        <!-- <div class="col-4 text-right">
+                            <span>10% <i class="fa fa-arrow-up"></i></span>
+                        </div> -->
+                    </div>
+                    <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                        <div class="progress-bar l-bg-orange" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-12">
+            <div class="card l-bg-blue-dark">
+                <div class="card-statistic-3 p-4">
+                    <div class="card-icon card-icon-large"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="mb-4">
+                        <h5 class="card-title mb-0">Cash</h5>
+                    </div>
+                    <div class="row align-items-center mb-2 d-flex">
+                        <div class="col-8">
+                            <h2 class="d-flex align-items-center mb-0">
+                                {{cash_blnc_list | last}}
+                            </h2>
+                        </div>
+                        <!-- <div class="col-4 text-right">
+                            <span>2.5% <i class="fa fa-arrow-up"></i></span>
+                        </div> -->
+                    </div>
+                    <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                        <div class="progress-bar l-bg-orange" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Test -->
+  <!-- <ul>
     <li><strong>Books:</strong> {{ num_books }}</li>
     <li><strong>Accounts:</strong> {{ num_accounts }}</li>
     <li><strong>Bank Accounts:</strong> {{ num_bank_accounts }}</li>
@@ -21,8 +123,12 @@
     <li><strong>Transactions:</strong> {{ num_transactions }}</li>
     <li><strong>Credits:</strong> {{ credit }}</li>
     <li><strong>Debits:</strong> {{ debit }}</li>
+    <li><strong>All Banks:</strong> {{ all_bank_balance | last }}</li>
+    <li><strong>All Cash:</strong> {{ cash_blnc_list | last }}</li>
+    <li><strong>All Hawala:</strong> {{ hawala_blnc_list | last }}</li>
+    <li><strong>All Clearing:</strong> {{ clearing_blnc_list | last }}</li>
 
-  </ul>
+  </ul> -->
 
   <!-- <a href="{% url 'logout'%}">Click here to logout.</a> -->
 {% endblock %}
