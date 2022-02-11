@@ -1,6 +1,9 @@
 import tempfile
 import random
 from datetime import datetime as dt
+from this import d
+from traceback import print_tb
+from unicodedata import name
 from xmlrpc.client import _datetime_type
 from django.db.models import Sum
 from django.db.models import Count
@@ -29,7 +32,8 @@ from django.contrib.auth.forms import PasswordResetForm
 
 from weasyprint import HTML
 from datetime import datetime, date
-import pytz
+from django.conf import settings
+from django.utils.timezone import make_aware
 from django.utils.datastructures import MultiValueDictKeyError
 # Create your views here.
 
@@ -106,9 +110,11 @@ def get_bookAllaccTotal(request,book_num):
     all_accounts_in_book = Account.objects.filter(operator__exact = request.user).filter(book__exact = str(book_num))
     account_balance_list = []
     account_balance_total = 0
+    jama =0
+    banam =0
     for acc in all_accounts_in_book:
         account = Account.objects.filter(operator__exact = request.user).get(pk = acc.id)
-        trans1 = account.from_account.filter(operator__exact = request.user).all()
+        trans1 = account.from_account.filter(operator__exact = request.user).all() 
         trans2 = account.to_account.filter(operator__exact = request.user).all()
         transaction_list =  trans1 | trans2
         for transaction in transaction_list:
@@ -158,8 +164,169 @@ def get_bookAllaccTotal(request,book_num):
                 if transaction.transaction_type == NONE and  transaction.bank == account and  transaction.bank != None:
                     account_balance_total = account_balance_total + transaction.amount
                     account_balance_list.append(account_balance_total)
-
+    
     return account_balance_list
+
+
+def get_bookPostiveBalance(request,book_num):
+    all_accounts_in_book = Account.objects.filter(operator__exact = request.user).filter(book__exact = str(book_num))
+    account_balance_list = []
+    account_balance_total = 0
+    p_blnce = 0
+    total_Positive_balance=0
+    Positive_balance =[]
+    Negative_balance =[]
+    for acc in all_accounts_in_book:
+        print('Account: ', acc.title)
+        p_blnce=0
+        account = Account.objects.filter(operator__exact = request.user).get(pk = acc.id)
+        trans1 = account.from_account.filter(operator__exact = request.user).all() 
+        trans2 = account.to_account.filter(operator__exact = request.user).all()
+        transaction_list =  trans1 | trans2
+        for transaction in transaction_list:
+                
+                print('Transaction:', transaction.account, transaction.bank, transaction , transaction.amount)
+                #Executed when new account is created 
+                if transaction.transaction_type == DEBIT and  transaction.account == account and  transaction.bank == None:
+                    p_blnce = p_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)                 
+                    # print('Debit 1: ', account_balance)            
+                #Executed when new account is created 
+                if transaction.transaction_type == CREDIT and  transaction.account == account and  transaction.bank == None:
+                    p_blnce = p_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Credited 2: ', account_balance)
+                #Executed when the current account is Credit account and transaction list is debited 
+                if transaction.transaction_type == DEBIT and  transaction.account == account and  transaction.bank != None:
+                    p_blnce = p_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Debit 2: ', account_balance)
+                
+                #Executed when the current account is Credit account and transaction list is credited
+                if transaction.transaction_type == CREDIT and  transaction.account == account and  transaction.bank != None:
+                    p_blnce = p_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Credited 1: ', account_balance)
+                
+                 #Executed when the current account is Credit account and transaction list is None
+                if transaction.transaction_type == NONE and  transaction.account == account and  transaction.bank != None:
+                    p_blnce = p_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('None 1: ', account_balance)
+         
+                                
+                #Executed when the current account is Debit account and transaction list is debited
+                if transaction.transaction_type == DEBIT and  transaction.bank == account and  transaction.account != None:
+                    p_blnce = p_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Debited 3: ', account_balance)
+                
+                #Executed when the current account is Debit account and transaction list is credited
+                if transaction.transaction_type == CREDIT and  transaction.bank == account and  transaction.account != None:
+                    p_blnce = p_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Credited 3: ', account_balance)
+                
+                #Executed when the current account is Debit account and transaction list is None
+                if transaction.transaction_type == NONE and  transaction.bank == account and  transaction.account != None:
+                    p_blnce = p_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)
+                print('Account', acc.title, account_balance_total )
+        if p_blnce > 0:
+            Positive_balance.append(p_blnce)
+    
+    for i in Positive_balance:
+        total_Positive_balance = total_Positive_balance + i
+    print('Positive_balance',total_Positive_balance)
+
+    return total_Positive_balance
+
+def get_bookNegativeBalance(request,book_num):
+    all_accounts_in_book = Account.objects.filter(operator__exact = request.user).filter(book__exact = str(book_num))
+    account_balance_list = []
+    account_balance_total = 0
+    n_blnce = 0
+    total_Negative_balance=0
+    Negative_balance =[]
+    for acc in all_accounts_in_book:
+        print('Account: ', acc.title)
+        n_blnce=0
+        account = Account.objects.filter(operator__exact = request.user).get(pk = acc.id)
+        trans1 = account.from_account.filter(operator__exact = request.user).all() 
+        trans2 = account.to_account.filter(operator__exact = request.user).all()
+        transaction_list =  trans1 | trans2
+        for transaction in transaction_list:            
+                # print('Transaction:', transaction.account, transaction.bank, transaction , transaction.amount)
+                #Executed when new account is created 
+                if transaction.transaction_type == DEBIT and  transaction.account == account and  transaction.bank == None:
+                    n_blnce = n_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)                 
+                    # print('Debit 1: ', account_balance)            
+                #Executed when new account is created 
+                if transaction.transaction_type == CREDIT and  transaction.account == account and  transaction.bank == None:
+                    n_blnce = n_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Credited 2: ', account_balance)
+                #Executed when the current account is Credit account and transaction list is debited 
+                if transaction.transaction_type == DEBIT and  transaction.account == account and  transaction.bank != None:
+                    n_blnce = n_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Debit 2: ', account_balance)
+                
+                #Executed when the current account is Credit account and transaction list is credited
+                if transaction.transaction_type == CREDIT and  transaction.account == account and  transaction.bank != None:
+                    n_blnce = n_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Credited 1: ', account_balance)
+                
+                 #Executed when the current account is Credit account and transaction list is None
+                if transaction.transaction_type == NONE and  transaction.account == account and  transaction.bank != None:
+                    n_blnce = n_blnce - transaction.amount
+                    account_balance_total = account_balance_total - transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('None 1: ', account_balance)
+         
+                                
+                #Executed when the current account is Debit account and transaction list is debited
+                if transaction.transaction_type == DEBIT and  transaction.bank == account and  transaction.account != None:
+                    n_blnce = n_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Debited 3: ', account_balance)
+                
+                #Executed when the current account is Debit account and transaction list is credited
+                if transaction.transaction_type == CREDIT and  transaction.bank == account and  transaction.account != None:
+                    n_blnce = n_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)
+                    # print('Credited 3: ', account_balance)
+                
+                #Executed when the current account is Debit account and transaction list is None
+                if transaction.transaction_type == NONE and  transaction.bank == account and  transaction.account != None:
+                    n_blnce = n_blnce + transaction.amount
+                    account_balance_total = account_balance_total + transaction.amount
+                    account_balance_list.append(account_balance_total)
+                print('Account', acc.title, account_balance_total )
+        if n_blnce < 0:
+            Negative_balance.append(n_blnce)
+    
+    for i in Negative_balance:
+        total_Negative_balance = total_Negative_balance + i
+    print('Negative_balance',total_Negative_balance)
+
+    return total_Negative_balance
 
     
 @login_required
@@ -192,7 +359,14 @@ def index(request):
     credit = Transaction.objects.filter(operator__exact = request.user).filter(transaction_type__exact='Credit').count()
 
     debit = Transaction.objects.filter(operator__exact = request.user).filter(transaction_type__exact='Debit').count()
-
+    Cash_Negative = get_bookNegativeBalance(request, '6')
+    Cash_Postive = get_bookPostiveBalance(request, '6')
+    Bank_Negative = get_bookNegativeBalance(request, '4')
+    Bank_Postive = get_bookPostiveBalance(request, '4')
+    Clearing_Negative = get_bookNegativeBalance(request, '2')
+    Clearing_Postive = get_bookPostiveBalance(request, '2')
+    Hawala_Negative = get_bookNegativeBalance(request, '3')
+    Hawala_Postive = get_bookPostiveBalance(request, '3')
     bank_blnc_list = get_bookAllaccTotal(request, '4')
     cash_blnc_list = get_bookAllaccTotal(request, '6')
     hawala_blnc_list = get_bookAllaccTotal(request, '3')
@@ -212,8 +386,16 @@ def index(request):
         'all_bank_balance':bank_blnc_list,
         'cash_blnc_list':cash_blnc_list,
         'hawala_blnc_list':hawala_blnc_list,
-        'clearing_blnc_list':clearing_blnc_list
-        
+        'clearing_blnc_list':clearing_blnc_list,
+        'Clearing_Negative':Clearing_Negative,
+        'Clearing_Postive':Clearing_Postive,
+        'Hawala_Negative':Hawala_Negative,
+        'Hawala_Postive':Hawala_Postive,
+        'Cash_Negative':Cash_Negative,
+        'Cash_Postive':Cash_Postive,
+        'Bank_Negative':Bank_Negative,
+        'Bank_Postive':Bank_Postive
+
 
     }
 
@@ -261,8 +443,8 @@ def accounts_detail(request, id):
         
         try:
             account = Account.objects.filter(operator__exact = request.user).get(pk = id)
-            trans1 = account.from_account.filter(operator__exact = request.user).all()
-            trans2 = account.to_account.filter(operator__exact = request.user).all()
+            trans1 = account.from_account.filter(operator__exact = request.user).all().order_by('transaction_date')
+            trans2 = account.to_account.filter(operator__exact = request.user).all().order_by('transaction_date')
             account_balance = 0
            
             # print('Trans1: ', trans1)
@@ -363,15 +545,13 @@ def accounts_detail(request, id):
 
 @login_required
 def transaction_list(request):
-    print("This is Transaction List")
     try:
         
         transaction_list = Transaction.objects.filter(operator__exact = request.user).all().order_by('id')
         banks = Account.objects.filter(operator__exact = request.user).filter(book__exact = '4').all()
         cash_accounts = Account.objects.filter(operator__exact = request.user).filter(book__exact = '6').all()
+        counter=0
         if transaction_list:
-            for trans in transaction_list:
-                print("trans:", trans)
             balance_list=[]
             balance=0
             total_balance = 0
@@ -442,18 +622,28 @@ def transaction_list(request):
             # print('Bank: ', total_bank_balance)
             
             
-
-            paginator = Paginator(transaction_list, 25) # Show 25 contacts per page.
+            paginator = Paginator(transaction_list, 50) # Show 25 contacts per page.
             
             page_number = request.GET.get('page', paginator.num_pages )
             try:
                 page_obj = paginator.page(page_number)
             except EmptyPage:
                 page_obj =  paginator.page(1)
+            # counter =0
+            # for trans in page_obj:
+            #     counter=counter+1
+            #     print("trans:",counter, trans)
+            # counter =0
+            # for blnc in balance_list:
+            #     counter=counter+1
+            #     print("Balance:",counter, blnc)
+            # counter =0
+            # for trans,blnc in zip(page_obj, balance_list):
+            #     counter=counter+1
+            #     print("ZIP :",counter, trans, blnc)
             
             
             zippedList = zip(page_obj, balance_list)
-            
             return render(request, 'list_views/transaction_list.html', context={
             #'transaction_list': transaction_list, 
             'total_balance': total_balance,
@@ -613,6 +803,7 @@ def add_account(request):
         reference_number = ''
         trans_balance= 0
         account_balance = 0
+        submitted_date = datetime.today()
     except Account.DoesNotExist:
         messages.error(request, 'Account Does not exist')
         return render(request, 'all_forms/edit_transaction.html')
@@ -689,9 +880,19 @@ def add_account(request):
                 trans_balance = trans_balance + amount
             else:
                 trans_balance = trans_balance
-        
 
-            Transaction.objects.create(operator = request.user , transaction_date =date, refernce_number =  reference_number, transaction_detail ='Opening Balance',account= account, bank = None, transaction_type = transaction_type, amount = float(amount), slip = '' , balance_after_transaction = trans_balance)
+            date = dt.strptime(date, "%Y-%m-%d")
+            date.tzinfo
+            settings.TIME_ZONE
+            aware_date = make_aware(date)
+            aware_date.tzinfo
+            
+            submitted_date.tzinfo
+            settings.TIME_ZONE
+            aware_sbdate = make_aware(submitted_date)
+            aware_sbdate.tzinfo
+
+            Transaction.objects.create(submitted_date=aware_sbdate ,operator = request.user , transaction_date =aware_date, refernce_number =  reference_number, transaction_detail ='Opening Balance',account= account, bank = None, transaction_type = transaction_type, amount = float(amount), slip = '' , balance_after_transaction = trans_balance)
 
             
             messages.success(request, 'Account saved succesfully')
@@ -714,6 +915,7 @@ def add_transaction(request):
     debit = DEBIT
     last_transaction_total = 0
     last_transaction_date = ''
+    submitted_date = datetime.today()
 
     
     context = {
@@ -728,18 +930,18 @@ def add_transaction(request):
     try:
         if request.method == 'POST':
             transaction_date = request.POST['transaction_date']
-            print('Transaction:', transaction_date)
+            # print('Transaction Date:', transaction_date, type(transaction_date))
+            # td= str(date.today())
+
+            
             transaction_detail = request.POST['transaction_detail']
             refernce_number = request.POST['refernce_number']
             account = request.POST['account']
-            print('Account: ', account)
+            # print('Account: ', account)
             account_object = Account.objects.filter(operator__exact = request.user).get(pk = account)
             bank = request.POST['bank']
             bank_object = Account.objects.filter(operator__exact = request.user).get(pk = bank)
-            transaction_type = request.POST['transaction_type']
-            amount = request.POST['amount']
-            
-            
+            amount = request.POST['amount']            
             slip = request.FILES.get('slip')
             uploaded_file_url = ''
             if slip:
@@ -747,7 +949,7 @@ def add_transaction(request):
                 filename = fs.save(slip.name, slip)
                 uploaded_file_url = fs.url(filename)
             
-            print('Slip:',slip)
+            # print('Slip:',slip)
 
             if transaction_list:
                 for transaction in  transaction_list:
@@ -756,26 +958,27 @@ def add_transaction(request):
                     if refernce_number == transaction.refernce_number:
                         messages.error(request, 'Reference Number already exist')
                         return render(request, 'all_forms/add_transaction.html', context = context)
-                print('last date: ', last_transaction_date, type(last_transaction_date))
-                print('curent date: ', transaction_date, type(transaction_date))
-                if not transaction_date:
-                    transaction_date = datetime.today()
-                    transaction_date = transaction_date.date()
-                    transaction_date = str(transaction_date)
-                 #changes needed to be done in production   
-                last_transaction_date = last_transaction_date.strftime('%Y-%m-%d')
-                last_transaction_date = datetime.strptime(last_transaction_date, '%Y-%m-%d')                
-                current_date = datetime.strptime(transaction_date, '%Y-%m-%d')
+                # print('last date: ', last_transaction_date, type(last_transaction_date))
+                # print('curent date: ', transaction_date, type(transaction_date))
+                # if not transaction_date:
+                #     transaction_date = date.today()
+                #     transaction_date = str(transaction_date)
+                #  #changes needed to be done in production   
+                # last_transaction_date = last_transaction_date.strftime('%Y-%m-%d')
+                # last_transaction_date = datetime.strptime(last_transaction_date, '%Y-%m-%d')                
+                # current_date = datetime.strptime(transaction_date, '%Y-%m-%d')
 
-                print('last date: ', last_transaction_date, type(last_transaction_date))
+                # print('last date: ', last_transaction_date, type(last_transaction_date))
 
-                print('curent date: ', current_date, type(current_date))
-                current_date = pytz.utc.localize(current_date)
-                last_transaction_date = pytz.utc.localize(last_transaction_date)
-                #changes needed to be done in production  
-                if current_date < last_transaction_date:
-                    messages.success(request, 'Date must be greater than last transaction date')
-                    return redirect('add-transaction')
+                # print('curent date: ', current_date, type(current_date))
+                # current_date = pytz.utc.localize(current_date)
+                # last_transaction_date = pytz.utc.localize(last_transaction_date)
+                # print('Current: ',current_date, type(current_date) )
+                # print('last_transaction_date: ',last_transaction_date, type(last_transaction_date) )
+                # #changes needed to be done in production  
+                # if current_date < last_transaction_date:
+                #     messages.success(request, 'Date must be greater than last transaction date')
+                #     return redirect('add-transaction')
 
 
             
@@ -799,13 +1002,13 @@ def add_transaction(request):
             
 
             if not transaction_date:
-                transaction_date = datetime.today()
+                transaction_date = date.today()
             
 
             if not refernce_number:
                 refernce_number = 'None'
-            if not transaction_type:
-                transaction_type = None
+            
+            
            
         
             if not uploaded_file_url:
@@ -818,13 +1021,29 @@ def add_transaction(request):
                 
             
 
-            print('Account Balance: ',account_object.balance)
-            print('Bank Balance: ',bank_object.balance)
+            # print('Account Balance: ',account_object.balance)
+            # print('Bank Balance: ',bank_object.balance)
 
-            account_object.save(force_update=True)
-            bank_object.save(force_update=True)
-            
-            Transaction.objects.create(operator = request.user , transaction_date = transaction_date, refernce_number = refernce_number ,transaction_detail =transaction_detail,account= account_object, bank =bank_object, transaction_type =transaction_type, amount = amount, slip = uploaded_file_url , balance_after_transaction = last_transaction_total)
+            # account_object.save(force_update=True)
+            # bank_object.save(force_update=True)
+            # td= str(date.today())
+
+            # print('ToDate:',td , type(td))
+            transaction_date = dt.strptime(transaction_date, "%Y-%m-%d")            
+            transaction_date.tzinfo
+            settings.TIME_ZONE
+            aware_datetime = make_aware(transaction_date)
+            aware_datetime.tzinfo   
+
+            submitted_date.tzinfo
+            settings.TIME_ZONE
+            aware_sdatetime = make_aware(submitted_date)
+            aware_sdatetime.tzinfo   
+        
+            print('Transaction Date:', transaction_date, type(transaction_date))
+            print('aware_datetime Date:', aware_datetime, type(aware_datetime))
+
+            Transaction.objects.create(submitted_date = aware_sdatetime, operator = request.user , transaction_date = aware_datetime, refernce_number = refernce_number ,transaction_detail =transaction_detail,account= account_object, bank =bank_object, transaction_type = NONE, amount = amount, slip = uploaded_file_url , balance_after_transaction = last_transaction_total)
             messages.success(request, 'Transaction saved succesfully')
             return redirect('transaction')      
     
@@ -1092,8 +1311,10 @@ def date_range(request):
         print('start obj: ',start_obj , type(start_obj) )
         date_range_result = Transaction.objects.filter(operator__exact = request.user).filter(transaction_date__range = [start_obj, end_obj])  
         transaction_list = Transaction.objects.filter(operator__exact = request.user).all().order_by('id')
-        print("start", start)
-        print("end", end)
+        # for i in date_range_result:
+        #     print('Loop: ', i)
+        # print("start", start)
+        # print("end", end)
         if transaction_list:
                 for trans in transaction_list:
                     if trans.transaction_type == DEBIT:
@@ -1105,6 +1326,14 @@ def date_range(request):
                         # print("transaction Credit: ", trans.amount)
                         balance = balance - trans.amount
                         balance_list.append(balance)
+                    if trans.transaction_type == NONE:
+                        # print("transaction Credit: ", trans.amount)
+                        balance = balance
+                        balance_list.append(balance)
+        c =0 
+        for i in balance_list:
+            c=c+1
+            print('i: ',c ,i)
         for trans, blanc in zip(transaction_list,balance_list):
             # dbdate = str(trans.transaction_date.date)
             strdbdate = trans.transaction_date.strftime('%Y-%m-%d')
@@ -1112,10 +1341,10 @@ def date_range(request):
             dbdate = dt.strptime(strdbdate, "%Y-%m-%d")
             sdate = dt.strptime(start, "%Y-%m-%d")
             edate = dt.strptime(end, "%Y-%m-%d")
-            # print("dbdate", dbdate, type(dbdate))
-            # print("sdate", sdate, type(sdate))
+            print("dbdate", dbdate, type(dbdate))
+            print("sdate", start, type(start))
             # print("edate", edate, type(edate))
-            if dbdate >= sdate and  dbdate <= edate:
+            if sdate >= dbdate and  edate <= dbdate:
                 print('balnce:', trans, blanc)
                 range_balance_list.append(blanc)
 
@@ -1128,8 +1357,8 @@ def date_range(request):
     return render(request, 'search/date_range.html', {
        'zippedlist':zippedlist,
        'date_range_result':date_range_result,
-       'start':start,
-       'end':end,
+       'start':sdate,
+       'end':edate,
        'credit': CREDIT,
         'debit': DEBIT,
         'range_balance_list':range_balance_list
@@ -1137,12 +1366,10 @@ def date_range(request):
     })
 
 def date_range_account(request, id):
-    
     try:
         if request.method == 'POST':
             start = request.POST['start']
             end = request.POST['end']
-            zipped_lists = []
             total_credit = 0
             total_debit = 0
             account_balance = 0
@@ -1156,21 +1383,33 @@ def date_range_account(request, id):
             end_obj = dt.strptime(end, "%m/%d/%Y")
             end = end_obj.strftime("%Y-%m-%d")
             
+            start_obj.tzinfo
+            settings.TIME_ZONE
+            aware_start_obj = make_aware(start_obj)
+            aware_start_obj.tzinfo
+
+            end_obj.tzinfo
+            settings.TIME_ZONE
+            aware_end_obj = make_aware(end_obj)
+            aware_end_obj.tzinfo
             account = Account.objects.filter(operator__exact = request.user).get(pk = id)
             
             trans1 = account.from_account.filter(operator__exact = request.user).all()
             trans2 = account.to_account.filter(operator__exact = request.user).all()        
             transactions = trans1 | trans2
-
-            fTDRange = account.from_account.filter(operator__exact = request.user).filter(transaction_date__range = [start, end]) 
-            tTDRange = account.to_account.filter(operator__exact = request.user).filter(transaction_date__range = [start, end])        
+ 
+            fTDRange = account.from_account.filter(operator__exact = request.user).filter(transaction_date__range = [aware_start_obj, aware_end_obj]) 
+            tTDRange = account.to_account.filter(operator__exact = request.user).filter(transaction_date__range = [aware_start_obj, aware_end_obj])
+                    
             aTDRange = fTDRange | tTDRange
-
-            if aTDRange:
-                for tran in aTDRange:
-                    print("tran: ", tran.amount)
-            sdate = dt.strptime(start, "%Y-%m-%d")
-            edate = dt.strptime(end, "%Y-%m-%d")
+            # for trans in aTDRange:
+                # print('Trabs: ', trans, trans.amount, trans.transaction_date)
+            
+            # if aTDRange:
+            #     for tran in aTDRange:
+            #         print("tran: ", tran.transaction_date)
+            # sdate = dt.strptime(start, "%Y-%m-%d")
+            # edate = dt.strptime(end, "%Y-%m-%d")
             # print("start_date 12", sdate, type(sdate))
             # print("end_date 12", edate, type(edate))
             
@@ -1248,30 +1487,54 @@ def date_range_account(request, id):
                     balance_list.append(account_balance)
                     # print('Credited 3: ', account_balance)
                 
-                
+            
 
             # print('Total Credit: ', total_credit, 'Total Debit: ', total_debit)
             # print('MYList: ', type(my_list), my_list)
-            
+            # i = 0
             # for x in balance_list:
-            #     print("Balance: ", x)
-            
+            #     i = i+1
+            #     print("Balance_list: ", i, x)
+            k= 0
             for trans, blanc in zip(transactions,balance_list):
-                strdbdate = trans.transaction_date.strftime('%Y-%m-%d')
-                dbdate = dt.strptime(strdbdate, "%Y-%m-%d")
-                if dbdate >= sdate and  dbdate <= edate:
-                    # print('balnce:', trans, blanc)
+                k = k+1
+                print("Iteration: ", k)
+                print('loop Trans', trans.amount, blanc)
+                
+                if aware_start_obj <= trans.transaction_date  and  aware_end_obj >= trans.transaction_date:
                     range_balance_list.append(blanc)
-            
-            
+                    print('Appended')
+                    print('loop Trans', trans.amount, blanc)
+        
+            for i in balance_list:
+                print('Balance: ', i)
+            i = 0
+            for bln in range_balance_list:
+                i = i+1
+                print('range_balance: ',i, bln)
+            cT=0
+            dT=0
+            for tran in aTDRange:
+                # print('trans.bank : ', trans.account, account, trans.amount)
+                if tran.account == account and tran.bank == None and tran.transaction_type == DEBIT:
+                    dT = dT + tran.amount
+                if tran.bank == account and tran.account != None:
+                    dT = dT + tran.amount
 
+                
+                if tran.account == account and tran.bank == None and tran.transaction_type == CREDIT:
+                    cT = cT + tran.amount
+
+                if tran.account == account and tran.bank != None:
+                    cT = cT + tran.amount
 
             zippedlist =  zip(range_balance_list,aTDRange)   
-
+            # for bln, trn in zippedlist:
+            #     print('Date: ', trn.transaction_date, 'bklan: ', bln)
 
             return render(request, 'search/date_range_account.html',{
-        'start':start,
-        'end':end,
+        'start':start_obj,
+        'end':end_obj,
         'account': account, 
         'clearing' : CLEARING,
         'simple' : SIMPLE,
@@ -1283,42 +1546,12 @@ def date_range_account(request, id):
         'total_debit':total_debit,
         'aTDRange':aTDRange,
         'id':id,
-        'range_balance_list':range_balance_list
+        'range_balance_list':range_balance_list,
+        'balance_list':balance_list,
+        'cT':cT,
+        'dT':dT
             
         })
-
-            # response = HttpResponse(content_type = 'application/pdf')
-            # response['Content-Dispostion'] = 'inline; attachment; filename = Tranasction'+\
-            # str(datetime.now()) + '.pdf'
-            # response['Content-Transfer-Encoding'] = "binary"
-
-
-            # htmlstring =  render_to_string('search/account_pdf.html', {
-            #         'start':start_date,
-            #         'end':end_date,
-            #         'account': account, 
-            #         'transactions':transactions,
-            #         'clearing' : CLEARING,
-            #         'simple' : SIMPLE,
-            #         'credit': CREDIT,
-            #         'debit': DEBIT,
-            #         'list': zipped_lists,
-            #         'none':None,   
-            #         'Campany_name': request.user.first_name,
-            #         'tagline': request.user.last_name,
-            #         'total_credit': total_credit,
-            #         'total_debit':total_debit
-           
-            #         })
-            # html = HTML(string = htmlstring)
-            # result = html.write_pdf()
-
-            # with tempfile.NamedTemporaryFile(delete=True) as output:
-            #     output.write(result)
-            #     output.flush()
-            #     output= open(output.name , 'rb')
-            #     response.write(output.read())
-            # return response
     except: 
         e = sys.exc_info() 
         print(e)
@@ -1327,7 +1560,7 @@ def date_range_account(request, id):
 
     
 
-def acc_export_pdf(request,id, start, end):
+def acc_export_pdf(request, id, start, end):
     zipped_lists = []
     total_credit = 0
     total_debit = 0
@@ -1447,7 +1680,10 @@ def acc_export_pdf(request,id, start, end):
             range_balance_list.append(blanc)
     
     
+    
 
+    campany_name = request.user.first_name
+    print('Campany: ', campany_name)
 
     zippedlist =  zip(range_balance_list,aTDRange)   
  
@@ -1468,7 +1704,8 @@ def acc_export_pdf(request,id, start, end):
     'total_credit': total_credit,
     'total_debit':total_debit,
     'aTDRange':aTDRange,
-    'account_balance':account_balance
+    'account_balance':account_balance,
+    'campany_name':campany_name
 
         })
     html = HTML(string = html_string)

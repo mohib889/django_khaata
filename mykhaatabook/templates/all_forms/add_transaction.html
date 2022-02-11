@@ -13,7 +13,7 @@
           
         <div class="form-group">
           <label for="">Date</label>
-          <input type="date" class= "form-control form-control-sm" name = "transaction_date" value="{{values.transaction_date}}">        
+          <input type="date" class= "form-control form-control-sm" name = "transaction_date"  value="{{values.transaction_date}}">        
         </div>
 
         <div class="form-group">
@@ -76,16 +76,7 @@
             </select>       
           </div>
 
-          <!-- <div class="form-group">
-            <label for="">Transactions Type</label>
-            <select name="transaction_type" id="" class="form-control form-control-sm"> 
-              <option name="transaction_type" value="{{credit}}">{{credit}}</option>
-              <option name="transaction_type" value="{{debit}}">{{debit}}</option>  
-              <option name="transaction_type" value="{{none}}">{{none}}</option>  
-
-            </select>                   
-          </div> -->
-
+          
           <div class="form-group">
             <label for="">Amount</label>
             <input type="number" class="form-control form-control-sm" name = "amount" value="{{values.amount}}">        
@@ -103,5 +94,5 @@
 
     </div>
     
-   
+  
 {% endblock %}

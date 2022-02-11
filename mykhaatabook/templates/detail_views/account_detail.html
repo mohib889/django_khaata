@@ -60,11 +60,11 @@
           {% csrf_token %}
           <div class="row">
             <div class="col" >
-              <input class="form-control form-control-sm" id="sdatepicker"  placeholder="From Date" type="text" name='start'>
+              <input class="form-control form-control-sm" id="sdatepicker"  placeholder="From Date" autocomplete="off" type="text" name='start'>
             </div>
 
             <div class="col">
-              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date"  type="text" name='end'>
+              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date"  autocomplete="off" type="text" name='end'>
             </div>
 
             <div class="col" >
@@ -100,9 +100,9 @@
       
     {% for trans, item in list %}
 
-          
         <tr>
           <th>{{forloop.counter}}</th>
+
           <td scope="row">{{ trans.transaction_date | date:"F d Y" }}</td>
          
           <td>{{ trans.transaction_detail }}</td>

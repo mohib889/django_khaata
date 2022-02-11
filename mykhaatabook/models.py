@@ -120,6 +120,7 @@ class Account(models.Model):
 
 
 class Transaction(models.Model):
+    submitted_date = models.DateTimeField()
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     transaction_date = models.DateTimeField()
     refernce_number = models.CharField(default='000000', max_length=366)

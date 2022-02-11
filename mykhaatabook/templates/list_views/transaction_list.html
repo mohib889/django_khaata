@@ -14,7 +14,7 @@
   {% include 'partials/messages.html' %}
 
   {% if page_obj %}
-
+<p>Hello</p>
   <div class="row">
     <div class="col">
       <div class="card card-body">
@@ -73,7 +73,11 @@
     </div>
   </div>
 
-  
+  <div class="col-md-2 m-2">
+    <a href="{% url 'add-transaction' %}" class="btn btn-primary l-bg-blue-dark">
+      <i class="bi bi-plus-circle"></i>   
+         Add Transaction</a>
+  </div>
   
   <table class="table table-hover">
     <thead class="l-bg-blue-dark">
@@ -92,7 +96,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for trans, balnc in zippedList %}
+      {% for trans in page_obj %}
       <tr>
         <th>{{forloop.counter}}</th>
         <td scope="row">{{ trans.transaction_date | date:"F d Y" }}</td>
@@ -107,8 +111,7 @@
         </td>
         <!-- <td class="text-danger ">
           
-          {{ trans.amount }}
-          
+          {{ trans.amount }}  
         </td>
 
         <td >
@@ -123,52 +126,14 @@
       </tr>
 
       {% endfor %}
+
+
+
+      
     </tbody>
-    {% if not page_obj.has_next %}
-    
-    <!-- <tfoot>
-      
-    <tr>
-       
-      <td colspan="4">TOTAL CREDIT/DEBIT:</td>
-      <td colspan="1">{{total_credit}}</td>
-      <td colspan="1" class="text-danger">{{total_debit}}</td>
-      <td colspan="2"></td>
-
-    </tr>
-    
-    <tr>
-       
-      <td colspan="6">TOTAL BANK:</td>
-      <td colspan="2">{{total_bank_balance}}</td>
-      
-    </tr>
-
-    <tr>
-       
-      <td colspan="6">TOTAL CLEARING:</td>
-      <td colspan="2">{{total_clearing}}</td>
-      
-    </tr>
-
-    <tr>
-       
-      <td colspan="6">TOTAL HAWALA:</td>
-      <td colspan="2">{{total_hawala}}</td>
-      
-    </tr>
-  </tfoot> -->
-
-  {% endif %}
   
   </table>
      
-  <div class="col-md-2">
-    <a href="{% url 'add-transaction' %}" class="btn btn-primary l-bg-blue-dark">
-      <i class="bi bi-plus-circle"></i>   
-         Add Transaction</a>
-  </div>
-
 
   <div class="col-4 offset-4">
     <nav aria-label="...">

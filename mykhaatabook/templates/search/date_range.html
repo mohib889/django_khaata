@@ -33,7 +33,7 @@
     </thead>
     <tbody>
       
-      {% for blnc,trans in zippedlist %}
+      {% for trans in date_range_result %}
       <tr>
         <th scope="row">{{ trans.transaction_date  | date:"F d Y"}}</th>
         <td>{{ trans.refernce_number }}</td>
