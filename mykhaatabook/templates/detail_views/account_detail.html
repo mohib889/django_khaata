@@ -64,7 +64,11 @@
             </div>
 
             <div class="col">
+<<<<<<< HEAD
               <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date" autocomplete="off"  type="text" name='end'>
+=======
+              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date"  autocomplete="off" type="text" name='end'>
+>>>>>>> 289bdd8c02fdc7e6bfeab14d9a10ea78db250c6e
             </div>
 
             <div class="col" >
@@ -100,9 +104,13 @@
 
     {% for trans, item in list %}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 289bdd8c02fdc7e6bfeab14d9a10ea78db250c6e
         <tr>
           <th>{{forloop.counter}}</th>
+
           <td scope="row">{{ trans.transaction_date | date:"F d Y" }}</td>
 
           <td>{{ trans.transaction_detail }}</td>

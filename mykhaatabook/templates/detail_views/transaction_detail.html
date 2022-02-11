@@ -18,6 +18,7 @@
   <p><strong>Bank:</strong> {{ transaction.bank }}</p>
   <p><strong>Amount:</strong> {{ transaction.amount }}</p>
   <p><strong>Balance:</strong> {{ transaction.balance_after_transaction }}</p>
+  <p><strong>Submitted Date:</strong> {{ transaction.submitted_date }}</p>
   <a href="{% url 'edit-transaction' transaction.id %}" class="btn btn-secondary">Edit</a>
 <br>
 <hr>

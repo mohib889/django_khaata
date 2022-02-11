@@ -31,7 +31,11 @@
       </tr>
     </thead>
     <tbody>
+<<<<<<< HEAD
       {% for balance , trans in list %}
+=======
+      {% for balance , trans in list %}     
+>>>>>>> 289bdd8c02fdc7e6bfeab14d9a10ea78db250c6e
        <tr>
         <th scope="col">{{forloop.counter}}</th>
         <td scope="row">{{ trans.transaction_date  | date:"F d Y" }}</td>
@@ -62,11 +66,19 @@
         </td>
 
         <td>
+<<<<<<< HEAD
 
           {{ balance }}
 
           </td>
         <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}">
+=======
+         
+          {{ balance }}
+
+          </td>
+        <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
+>>>>>>> 289bdd8c02fdc7e6bfeab14d9a10ea78db250c6e
           <div class="p-0 mb-2 bg-dark bg-gradient ">
           Slip {{trans.id}}
         </div> </a></td>
@@ -74,7 +86,11 @@
 
       </tr>
       {% endfor %}
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 289bdd8c02fdc7e6bfeab14d9a10ea78db250c6e
     </tbody>
 
     <!-- <tfoot>
