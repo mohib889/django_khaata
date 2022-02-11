@@ -1,7 +1,7 @@
 {% extends "home/layout.html" %}
 
 {% block breadcrumb %}
- 
+
   <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
   <li class="breadcrumb-item active" aria-current="page">Search</li>
 
@@ -14,7 +14,8 @@
   {% if aTDRange %}
 
   <p>Date: {{start}}  to {{end}}</p>
-  
+  <p>CTotal: {{cT}}</p>
+  <p>DTotal: {{dT}}</p>
   <table class="table table-hover">
     <thead class="l-bg-blue-dark">
 
@@ -30,17 +31,17 @@
       </tr>
     </thead>
     <tbody>
-      {% for balance , trans in list %}      
-      <tr>
+      {% for balance , trans in list %}
+       <tr>
         <th scope="col">{{forloop.counter}}</th>
         <td scope="row">{{ trans.transaction_date  | date:"F d Y" }}</td>
         <td>{{ trans.transaction_detail }}</td>
-        <td>{% if trans.account ==  account %}  
+        <td>{% if trans.account ==  account %}
           {{ trans.bank }}
       {% else %}
           {{ trans.account }}
       {% endif %}  </td>
-        
+
         <td>
           {% if trans.account == account and trans.bank == none and trans.transaction_type == credit%}
           {{ trans.amount }}
@@ -60,32 +61,36 @@
             {% endif %}
         </td>
 
-        <td>{{ balance }}</td>
-        <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
+        <td>
+
+          {{ balance }}
+
+          </td>
+        <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}">
           <div class="p-0 mb-2 bg-dark bg-gradient ">
           Slip {{trans.id}}
         </div> </a></td>
 
-      
+
       </tr>
-      
       {% endfor %}
+
     </tbody>
 
     <!-- <tfoot>
       <tr>
-       
+
         <td colspan="4">TOTAL CREDIT/DEBIT:</td>
         <td colspan="1">{{total_credit}}</td>
         <td colspan="1" class="text-danger">{{total_debit}}</td>
         <td colspan="2">
           {{ range_balance_list|last }}
         </td>
-  
+
       </tr>
     </tfoot> -->
-  
-  
+
+
   </table>
 
   <a href="{% url 'acc-export-pdf' id start end %}" class="btn btn-info l-bg-blue-dark">
@@ -98,7 +103,7 @@
 
 
 
-{% endif %} 
+{% endif %}
 
 
 

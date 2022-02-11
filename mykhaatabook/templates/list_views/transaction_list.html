@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block breadcrumb %}
- 
+
   <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
   <li class="breadcrumb-item active" aria-current="page">All Transaction</li>
 
@@ -10,20 +10,19 @@
 
 {% block content %}
  <h1>Transaction List</h1>
- 
+
   {% include 'partials/messages.html' %}
 
   {% if page_obj %}
-
   <div class="row">
     <div class="col">
       <div class="card card-body">
         <form action="{% url 'search_results' %}" method="get">
-          
+
           <div class="row">
 
             <div class="col">
-              <input class="form-control form-control-sm" type="text" placeholder="Search Bar" name='search'>
+              <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="Search Bar" name='search'>
             </div>
 
             <div class="col">
@@ -31,7 +30,7 @@
             </div>
 
           </div>
-     
+
 
 
         </form>
@@ -55,11 +54,11 @@
           {% csrf_token %}
           <div class="row">
             <div class="col" >
-              <input class="form-control form-control-sm" id="sdatepicker" type="text" placeholder="From Date" name='start'>
+              <input class="form-control form-control-sm" id="sdatepicker" type="text" autocomplete="off" placeholder="From Date" name='start'>
             </div>
 
             <div class="col">
-              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date" type="text" name='end'>
+              <input  class="form-control form-control-sm" id="edatepicker" autocomplete="off" placeholder="To Date" type="text" name='end'>
             </div>
 
             <div class="col" >
@@ -73,8 +72,12 @@
     </div>
   </div>
 
-  
-  
+  <div class="col-md-2 m-2">
+    <a href="{% url 'add-transaction' %}" class="btn btn-primary l-bg-blue-dark">
+      <i class="bi bi-plus-circle"></i>
+         Add Transaction</a>
+  </div>
+
   <table class="table table-hover">
     <thead class="l-bg-blue-dark">
 
@@ -92,7 +95,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for trans, balnc in zippedList %}
+      {% for trans in page_obj %}
       <tr>
         <th>{{forloop.counter}}</th>
         <td scope="row">{{ trans.transaction_date | date:"F d Y" }}</td>
@@ -101,79 +104,41 @@
         <td>{{ trans.account }}</td>
         <td>{{ trans.bank }}</td>
         <td>
-          
+
           {{ trans.amount }}
-          
+
         </td>
         <!-- <td class="text-danger ">
-          
+
           {{ trans.amount }}
-          
+
         </td>
 
         <td >
           {{ balnc }}
         </td> -->
-        <td><a style="text-decoration: none;" class="link-dark" href="{{ trans.get_absolute_url }}"> 
+        <td><a style="text-decoration: none;" class="link-dark" href="{{ trans.get_absolute_url }}">
           <div class="p-0 mb-1 bg-secondary btn ">
           View
         </div> </a></td>
 
-        
+
       </tr>
 
       {% endfor %}
+
+
+
+
     </tbody>
-    {% if not page_obj.has_next %}
-    
-    <!-- <tfoot>
-      
-    <tr>
-       
-      <td colspan="4">TOTAL CREDIT/DEBIT:</td>
-      <td colspan="1">{{total_credit}}</td>
-      <td colspan="1" class="text-danger">{{total_debit}}</td>
-      <td colspan="2"></td>
 
-    </tr>
-    
-    <tr>
-       
-      <td colspan="6">TOTAL BANK:</td>
-      <td colspan="2">{{total_bank_balance}}</td>
-      
-    </tr>
-
-    <tr>
-       
-      <td colspan="6">TOTAL CLEARING:</td>
-      <td colspan="2">{{total_clearing}}</td>
-      
-    </tr>
-
-    <tr>
-       
-      <td colspan="6">TOTAL HAWALA:</td>
-      <td colspan="2">{{total_hawala}}</td>
-      
-    </tr>
-  </tfoot> -->
-
-  {% endif %}
-  
   </table>
-     
-  <div class="col-md-2">
-    <a href="{% url 'add-transaction' %}" class="btn btn-primary l-bg-blue-dark">
-      <i class="bi bi-plus-circle"></i>   
-         Add Transaction</a>
-  </div>
 
 
   <div class="col-4 offset-4">
     <nav aria-label="...">
       <ul class="pagination">
-  
+
         {% if page_obj.has_previous %}
           <li class="page-item">
             <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
@@ -188,11 +153,11 @@
             <span class="page-link">Previous</span>
           </li>
         {% endif %}
-  
+
         <li class="page-item active">
           <span class="page-link">{{ page_obj.number }}</span>
         </li>
-  
+
         {% if page_obj.has_next %}
           <li class="page-item">
             <a class="page-link" href="?page={{ page_obj.next_page_number }}">
@@ -207,7 +172,7 @@
             <span class="page-link">Next</span>
           </li>
         {% endif %}
-  
+
       </ul>
     </nav>
   </div>
@@ -219,7 +184,7 @@
 
 
 
-{% endif %} 
+{% endif %}
 
 
 <script>

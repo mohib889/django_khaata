@@ -15,15 +15,15 @@
       <!-- <p class="card-text">Type: {{ account.book }}</p> -->
       <p class="card-text">Phone: {{ account.phone_number }}</p>
       <p class="card-text">Address: {{ account.address }}</p>
-      <p class="card-text">Balance: {{ account.balance }}</p>
+      <p class="card-text">Balance: {{ a_blnce }}</p>
 
       <!-- <a href="#" class="btn btn-primary">Know more</a> -->
   </div>
   <div class="card-footer text-muted"> {{ account.date_created }} </div>
-</div>  
+</div>
 
 <!-- <h1>Title: {{ account.title }}</h1> -->
-  
+
   <!-- <div class="card text-dark bg-dark border-info mb-3" style="max-width: 35rem;"> -->
     <!-- <div class="card body"> -->
 
@@ -60,11 +60,11 @@
           {% csrf_token %}
           <div class="row">
             <div class="col" >
-              <input class="form-control form-control-sm" id="sdatepicker"  placeholder="From Date" type="text" name='start'>
+              <input class="form-control form-control-sm" id="sdatepicker"  placeholder="From Date" autocomplete="off" type="text" name='start'>
             </div>
 
             <div class="col">
-              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date"  type="text" name='end'>
+              <input  class="form-control form-control-sm" id="edatepicker" placeholder="To Date" autocomplete="off"  type="text" name='end'>
             </div>
 
             <div class="col" >
@@ -90,41 +90,31 @@
         <th scope="col">Date</th>
         <th scope="col">Details</th>
         <th scope="col">Account</th>
-        <th scope="col">Credit</th>
         <th scope="col">Debit</th>
+        <th scope="col">Credit</th>
         <th scope="col">Balance</th>
         <th scope="col">Slip</th>
       </tr>
     </thead>
     <tbody>
-      
+
     {% for trans, item in list %}
 
-          
+
         <tr>
           <th>{{forloop.counter}}</th>
           <td scope="row">{{ trans.transaction_date | date:"F d Y" }}</td>
-         
+
           <td>{{ trans.transaction_detail }}</td>
           <td>
-            {% if trans.account ==  account %}  
+            {% if trans.account ==  account %}
                 {{ trans.bank }}
             {% else %}
                 {{ trans.account }}
-            {% endif %}    
+            {% endif %}
 
             </td>
           <td>
-            {% if trans.account == account and trans.bank == none and trans.transaction_type == credit%}
-                {{ trans.amount }}
-            {% endif %}
-
-            {% if trans.account == account and trans.bank != none %}
-              {{ trans.amount }}
-            {% endif %}
-  
-          </td>
-          <td class="text-danger">
             {% if trans.account == account and trans.bank == none and trans.transaction_type == debit %}
               {{ trans.amount }}
             {% endif %}
@@ -132,32 +122,42 @@
             {% if trans.bank == account and trans.account != none %}
               {{ trans.amount }}
             {% endif %}
+
+          </td>
+          <td class="text-danger">
+              {% if trans.account == account and trans.bank == none and trans.transaction_type == credit%}
+                {{ trans.amount }}
+            {% endif %}
+
+            {% if trans.account == account and trans.bank != none %}
+              {{ trans.amount }}
+            {% endif %}
         </td>
 
         <td>{{ item }}</td>
-          <td><a style="text-decoration: none;" class="link-dark" href="{{ trans.get_absolute_url }}"> 
+          <td><a style="text-decoration: none;" class="link-dark" href="{{ trans.get_absolute_url }}">
             <div class="p-0 mb-2 bg-secondary btn ">
             View
           </div> </a></td>
-  
+
         </tr>
 
     {% empty %}
 
-    <p>No Transactions</p>    
-   
+    <p>No Transactions</p>
 
-    
+
+
     {% endfor %}
 
 
     {% else %}
     <p>There are no transactions in the app.</p>
-  {% endif %} 
+  {% endif %}
     </tbody>
 
   </table>
-  </div> 
+  </div>
 
   <script>
     $( function() {

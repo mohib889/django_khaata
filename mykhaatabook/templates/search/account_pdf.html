@@ -23,7 +23,7 @@ table.center {
   margin-right: 0;
 }
 body {
-    
+
     font-family: 'Manrope', sans-serif
 }
 th, td {
@@ -34,11 +34,11 @@ th, td {
         @page{
             size: 'A4';
             margin: 2.5cm, 1.5cm, 3.5cm, 1.5cm;
-        
-        
+
+
 
             @bottom-right{
-                content: "Page " counter(page)  " of " counter(pages); 
+                content: "Page " counter(page)  " of " counter(pages);
             }
         }
 
@@ -49,66 +49,57 @@ th, td {
 <body>
 
     <div style="line-height: 0.1;">
-        <h2 class="text-center" style="font-family: Arial, Helvetica, sans-serif;">{{Campany_name}} Company Name</h2>
-        <p style="font-size: 11px; font-family: Arial, Helvetica, sans-serif;">{{tagline}} Hello</p>
+        <h2 class="text-center" style="font-family: Arial, Helvetica, sans-serif;">{{campany_name}}</h2>
+        <p style="font-size: 11px; font-family: Arial, Helvetica, sans-serif;">Import and Export Traders</p>
     </div>
     <br>
 
     <div style="border: 1px black solid; width: 300px; line-height: 0.2; height: 75px; font-size: 11px;">
         <p style="margin-left: 5px;">Title: {{account.title}}</p>
-        <p style="margin-left: 5px;">Accoun No: {{account.id}}</p>
+        <p style="margin-left: 5px;">Account No: {{account.id}}</p>
         <p style="margin-left: 5px;">Phone: {{account.phone_number}}</p>
-        <p style="margin-left: 5px;">Balance: {{account_balance}}</p>
-        
+        <!--<p style="margin-left: 5px;">Balance: {{account_balance}}</p>-->
+
         <p style="margin-left: 5px;">From Date: {{start}}  To  {{end}}</p>
 
-        
+
     </div>
 <br>
     {% if aTDRange %}
 
-  
+
   <table class="table" style="width:700px">
-    
+
     <thead class="thead l-bg-blue-dark">
 
       <tr>
         <th colspan="1">Date</th>
-        <th colspan="1">Reference#</th>
+        <!--<th colspan="1">Reference#</th>-->
         <th colspan="5">Details</th>
         <th colspan="1">Account</th>
-        <th colspan="1">Credit</th>
         <th colspan="1">Debit</th>
+        <th colspan="1">Credit</th>
         <th colspan="1">Balance</th>
-        
+
       </tr>
     </thead >
     <tbody>
         {% for item, trans in list %}
-       
+
 
         <tr>
           <th colspan="1" scope="row">{{ trans.transaction_date | date:"F d Y" }}</th>
-          <td colspan="1">{{ trans.id }}</td>
+          <!--<td colspan="1">{{ trans.id }}</td>-->
           <td colspan="5">{{ trans.transaction_detail }}</td>
           <td colspan="1">
-            {% if trans.account ==  account %}  
+            {% if trans.account ==  account %}
                 {{ trans.bank }}
             {% else %}
                 {{ trans.account }}
-            {% endif %}    
+            {% endif %}
 
             </td>
-          <td colspan="1">
-            {% if trans.account == account and trans.bank == none and trans.transaction_type == credit%}
-                {{ trans.amount }}
-            {% endif %}
 
-            {% if trans.account == account and trans.bank != none %}
-              {{ trans.amount }}
-            {% endif %}
-  
-          </td>
           <td colspan="1" style="color: red;">
             {% if trans.account == account and trans.bank == none and trans.transaction_type == debit %}
               {{ trans.amount }}
@@ -118,30 +109,39 @@ th, td {
               {{ trans.amount }}
             {% endif %}
         </td>
+<td colspan="1">
+            {% if trans.account == account and trans.bank == none and trans.transaction_type == credit%}
+                {{ trans.amount }}
+            {% endif %}
 
+            {% if trans.account == account and trans.bank != none %}
+              {{ trans.amount }}
+            {% endif %}
+
+          </td>
         <td colspan="1" >{{ item }}</td>
 
-  
+
         </tr>
 
 
 
-     
+
       {% endfor %}
     </tbody>
-    
+
 
     <!-- <tfoot>
       <tr>
-       
+
         <td colspan="8">TOTAL CREDIT/DEBIT:</td>
         <td colspan="1">{{total_credit}}</td>
         <td colspan="1" style="color: red;">{{total_debit}}</td>
-        
-  
+
+
       </tr>
     </tfoot> -->
-      
+
   </table>
 
     {% else %}
@@ -151,6 +151,6 @@ th, td {
 
 
 
-{% endif %} 
+{% endif %}
 </body>
 </html>

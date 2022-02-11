@@ -8,24 +8,24 @@
         <form action="{% url 'add-transaction' %}" method="POST" enctype="multipart/form-data">
           {% include 'partials/messages.html' %}
           {% csrf_token %}
-          
-        
-          
+
+
+
         <div class="form-group">
           <label for="">Date</label>
-          <input type="date" class= "form-control form-control-sm" name = "transaction_date" value="{{values.transaction_date}}">        
+          <input type="date" class= "form-control form-control-sm" name = "transaction_date" value="{{values.transaction_date}}">
         </div>
 
         <div class="form-group">
             <label for="">Reference Number</label>
-            <input type="text" class= "form-control form-control-sm"  name = "refernce_number" value="{{values.refernce_number}}">        
+            <input type="text" class= "form-control form-control-sm"  name = "refernce_number" value="{{values.refernce_number}}">
           </div>
 
         <div class="form-group">
           <label for="">Details</label>
-          <input type="text" class= "form-control form-control-sm" name = "transaction_detail" value="{{values.transaction_detail}}">        
+          <input type="text" class= "form-control form-control-sm" name = "transaction_detail" value="{{values.transaction_detail}}">
         </div>
-        
+
         <!-- <div class="dropdown m-2">
           <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">From Account
           <span class="caret"></span></button>
@@ -33,7 +33,7 @@
             <input class="form-control" id="myInput" type="text" placeholder="Search..">
             {% for account in accounts %}
               <li name="account" value="{{account.id}}">{{account}}</li>
-            {% endfor %}  
+            {% endfor %}
           </ul>
         </div> -->
 
@@ -44,7 +44,7 @@
             <input class="form-control" id="myInput" type="text" placeholder="Search..">
             {% for account in accounts %}
               <li name="account" value="{{account.id}}">{{account}}</li>
-            {% endfor %}  
+            {% endfor %}
           </ul>
         </div> -->
         <div class="form-group ">
@@ -53,14 +53,14 @@
               <!-- <input class="form-control" id="myInput" type="text" placeholder="Search."> -->
               {% for account in accounts %}
               <option name="account" value="{{account.id}}">{{account}}</option>
-              {% endfor %}  
-            </select>       
+              {% endfor %}
+            </select>
           </div>
 
           <!-- <div class="search">
-            
+
             <input type="text" name="search" id="search" class="form-control" placeholder="Search">
-            
+
           </div>
 
            -->
@@ -68,32 +68,32 @@
           <div class="form-group">
             <label for="">To Account</label>
             <select  name="bank"  id="" placeholder="Debit Account" class="form-control  form-control-sm">
-              
+
               {% for account in accounts %}
               <option name="account" value="{{account.id}}">{{account}}</option>
               {% endfor %}
-             
-            </select>       
+
+            </select>
           </div>
 
           <!-- <div class="form-group">
             <label for="">Transactions Type</label>
-            <select name="transaction_type" id="" class="form-control form-control-sm"> 
+            <select name="transaction_type" id="" class="form-control form-control-sm">
               <option name="transaction_type" value="{{credit}}">{{credit}}</option>
-              <option name="transaction_type" value="{{debit}}">{{debit}}</option>  
-              <option name="transaction_type" value="{{none}}">{{none}}</option>  
+              <option name="transaction_type" value="{{debit}}">{{debit}}</option>
+              <option name="transaction_type" value="{{none}}">{{none}}</option>
 
-            </select>                   
+            </select>
           </div> -->
 
           <div class="form-group">
             <label for="">Amount</label>
-            <input type="number" class="form-control form-control-sm" name = "amount" value="{{values.amount}}">        
+            <input type="number" class="form-control form-control-sm" name = "amount" value="{{values.amount}}">
           </div>
 
           <div class="form-group">
             <label for="">Slip</label>
-            <input type="file"  class="form-control form-control-sm" alt="No Image" value="{{values.slip}}" name = "slip">        
+            <input type="file"  class="form-control form-control-sm" alt="No Image" value="{{values.slip}}" name = "slip">
           </div>
 
         <input type="submit" value="submit" class="btn btn-primary l-bg-blue-dark mt-2">
@@ -102,6 +102,6 @@
       </div>
 
     </div>
-    
-   
+
+
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "home/layout.html" %}
 
 {% block breadcrumb %}
- 
+
   <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
   <li class="breadcrumb-item active" aria-current="page">Search</li>
 
@@ -32,8 +32,8 @@
       </tr>
     </thead>
     <tbody>
-      
-      {% for blnc,trans in zippedlist %}
+
+      {% for trans in date_range_result %}
       <tr>
         <th scope="row">{{ trans.transaction_date  | date:"F d Y"}}</th>
         <td>{{ trans.refernce_number }}</td>
@@ -56,21 +56,21 @@
           {% if trans.transaction_date == trans.transaction_date  %}
           {{ blnc }}
           {% endif %}
-          
+
         </td> -->
-        <!-- <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}"> 
+        <!-- <td><a style="text-decoration: none;" class="link-light" href="{{ trans.get_absolute_url }}">
           <div class="p-0 mb-2 bg-dark bg-gradient ">
           Slip {{trans.id}}
         </div> </a></td> -->
 
-        
+
       </tr>
 
       {% endfor %}
     </tbody>
 
-  
-  
+
+
   </table>
 
   <a href="{% url 'export-pdf' start end %}" class="btn btn-info l-bg-blue-dark">
@@ -83,7 +83,7 @@
 
 
 
-{% endif %} 
+{% endif %}
 
 
 

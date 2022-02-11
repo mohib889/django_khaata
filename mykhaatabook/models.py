@@ -18,7 +18,7 @@ TRANSACTION_TYPE_CHOICES = (
     (CREDIT, 'Credit'),
     (DEBIT, 'Debit'),
     (NONE, 'None')
-    
+
 )
 
 SIMPLE = '1'
@@ -53,8 +53,8 @@ BOOK_TYPE_CHOICES = (
 
 class AccountsBook(models.Model):
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-  
-    book_title = models.CharField(max_length=200, help_text="اکونٹ کا نام درج کریں") 
+
+    book_title = models.CharField(max_length=200, help_text="اکونٹ کا نام درج کریں")
     book_type = models.CharField(
         choices=BOOK_TYPE_CHOICES,
         help_text="اکونٹ کی قسم: sm یا cl",
@@ -65,7 +65,7 @@ class AccountsBook(models.Model):
 
     def __str__(self):
         return f"{self.book_title}"
-    
+
     def get_absolute_url(self):
         return reverse('accountsbook-detail', args=[str(self.id)])
 
@@ -84,7 +84,7 @@ class Account(models.Model):
         null=True,
         default=0,
         blank=True
-    ) 
+    )
     transaction_type = models.CharField(
         choices=TRANSACTION_TYPE_CHOICES,
         help_text="رقم کی قسم: CR یا DR",
@@ -100,7 +100,7 @@ class Account(models.Model):
         default='Simple',
         max_length=266
     )
-    
+
     balance = models.FloatField(
         null=True,
         default=0,
@@ -109,7 +109,7 @@ class Account(models.Model):
 
     def __str__(self):
         return f"{self.title}"
-    
+
     def get_absolute_url(self):
         return reverse('account-detail', args=[str(self.id)])
 
@@ -120,6 +120,7 @@ class Account(models.Model):
 
 
 class Transaction(models.Model):
+
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     transaction_date = models.DateTimeField()
     refernce_number = models.CharField(default='000000', max_length=366)
@@ -133,7 +134,7 @@ class Transaction(models.Model):
          null=True,
          blank=True
     )
-    
+
     bank = models.ForeignKey(
          Account,
          related_name='to_account',
@@ -149,7 +150,7 @@ class Transaction(models.Model):
         help_text="رقم کی قسم: کریڈٹ یا ڈیبٹ",
         max_length=32
 
-    ) 
+    )
     amount = models.FloatField(
         null=True,
         default=0
@@ -159,7 +160,7 @@ class Transaction(models.Model):
         default=0
     )
     slip = models.ImageField(upload_to ='uploads/', null=True)
-    
+
 
 
     def __str__(self):
