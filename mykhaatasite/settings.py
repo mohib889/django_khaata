@@ -37,7 +37,7 @@ DEBUG = True
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mohib889.pythonanywhere.com']
 
 
 # Application definition
